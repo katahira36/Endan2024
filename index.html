@@ -5,7 +5,12 @@
   <style >.hogehoge {
     padding: 20px;
     margin: 20px;
-  }</style>
+  }
+  .wrapper{
+  width: 100%;
+  height: 100%;
+}
+  </style>
 </head>
 <body>
 
@@ -85,6 +90,8 @@
 
   // window.addEventListener('load' , function(){
     console.log('canvas')
+    $('#movie').attr('width', $('.wrapper').width())
+    $('#movie').attr('height', $('.wrapper').height());
     var movie = document.getElementById("movie")
     const ctx = movie.getContext("2d")
     // for(;1;){
