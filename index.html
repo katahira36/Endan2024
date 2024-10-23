@@ -34,6 +34,10 @@
   // var downloadbutton = document.getElementById('download')
   var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
+
+  var movie = document.getElementById("movie")
+  const ctx = movie.getContext("2d")
+
   var downloaddata = []
   let str = 0;
     // まずはユーザーのカメラ・マイクへのアクセスを実施
@@ -66,6 +70,7 @@
 
   startbutton.addEventListener('click', function(ev){
     recorder.start(10000)
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
     ev.preventDefault()
   }, false);
 
@@ -89,16 +94,16 @@
   })
 
   // window.addEventListener('load' , function(){
-    console.log('canvas')
-    // $('#movie').attr('width', $('.wrapper').width())
-    // $('#movie').attr('height', $('.wrapper').height());
-    var movie = document.getElementById("movie")
-    const ctx = movie.getContext("2d")
-    // for(;1;){
-      setTimeout(() => {
-      ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-    }, 1000);
-    // }
+    // console.log('canvas')
+    // // $('#movie').attr('width', $('.wrapper').width())
+    // // $('#movie').attr('height', $('.wrapper').height());
+    // var movie = document.getElementById("movie")
+    // const ctx = movie.getContext("2d")
+    // // for(;1;){
+    //   setTimeout(() => {
+    //   ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    // }, 1000);
+    // // }
   // })
 
 </script>
