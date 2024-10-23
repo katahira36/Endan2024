@@ -69,8 +69,8 @@
   })
 
   startbutton.addEventListener('click', function(ev){
-    recorder.start(10000)
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    recorder.start(10000)
     ev.preventDefault()
   }, false);
 
