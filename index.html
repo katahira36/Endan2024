@@ -117,7 +117,7 @@
   var move=0
 
   setInterval(() => {
-    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    ctx.drawImage(video, 0, 0)
     ctx.fillStyle="red";
     ctx.fillRect(140,65+move/5,20,20);
     move++
