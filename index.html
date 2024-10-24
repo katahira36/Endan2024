@@ -45,14 +45,6 @@
   movie.height = window.innerHeight
   
   video.style = 'display:none'
-
-  
-  window.addEventListener('resize', function() {
-    video.width  = window.innerWidth
-    video.height = window.innerHeight
-    movie.width  = window.innerWidth
-    movie.height = window.innerHeight
-  })
   console.log(video.height)
 
   const ctx = movie.getContext("2d")
@@ -66,10 +58,15 @@
   .then(function (stream) {
     video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
     video.play()
+    video.width  = video.videoWidth
+    video.height = video.videoHeight
+    movie.width  = video.videoWidth
+    movie.height = window.videoHeight
+  
 
-    var vdata = stream.getVideoTracks()
-    var videodata =vdata.getSettings().facingMode
-    console.log(videodata)
+    // var vdata = stream.getVideoTracks()
+    // var videodata =vdata.getSettings().facingMode
+    // console.log(videodata)
     
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
