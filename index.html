@@ -37,6 +37,8 @@
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
+  movie.width  = video.width;
+  movie.height = video.height
   const ctx = movie.getContext("2d")
 
   var downloaddata = []
