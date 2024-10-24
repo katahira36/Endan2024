@@ -37,17 +37,19 @@
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
+  console.log(video.height)
   movie.width  = window.innerWidth
   movie.height = window.innerHeight
-  video.width  = window.innerWidth
-  video.height = window.innerHeight
+  
+  // video.width  = window.innerWidth
+  // video.height = window.innerHeight
   const ctx = movie.getContext("2d")
-  window.addEventListener('resize', function() {
-    movie.width  = window.innerWidth
-    movie.height = window.innerHeight
-    video.width  = window.innerWidth
-    video.height = window.innerHeight
-  })
+  // window.addEventListener('resize', function() {
+  //   movie.width  = window.innerWidth
+  //   movie.height = window.innerHeight
+  //   video.width  = window.innerWidth
+  //   video.height = window.innerHeight
+  // })
 
   var downloaddata = []
   let str = 0;
