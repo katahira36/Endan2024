@@ -37,8 +37,10 @@
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
-  movie.width  = video.width;
-  movie.height = video.height
+  var w = $('.wrapper').width()
+  var h = $('.wrapper').height()
+  $('#movie').attr('width', w)
+  $('#movie').attr('height', h)
   const ctx = movie.getContext("2d")
 
   var downloaddata = []
@@ -102,7 +104,7 @@
   // window.addEventListener('load' , function(){
     // console.log('canvas')
     // // $('#movie').attr('width', $('.wrapper').width())
-    // // $('#movie').attr('height', $('.wrapper').height());
+    // // $('#movie').attr('height', $('.wrapper').height())
     // var movie = document.getElementById("movie")
     // const ctx = movie.getContext("2d")
     // // for(;1;){
