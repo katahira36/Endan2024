@@ -37,14 +37,17 @@
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
-  var w = $('.wrapper').width()
-  var h = $('.wrapper').height()
-  $('#movie').attr('width', w)
-  $('#movie').attr('height', h)
+  movie.width  = window.innerWidth
+  movie.height = window.innerHeight
   const ctx = movie.getContext("2d")
+  window.addEventListener('resize', function() {
+    movie.width  = window.innerWidth
+    movie.height = window.innerHeight
+  })
 
   var downloaddata = []
   let str = 0;
+
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
