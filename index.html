@@ -30,6 +30,7 @@
 
 
 <script>
+  window.addEventListener('load' , function(){
   var startbutton = document.getElementById('start')
   var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
@@ -106,16 +107,10 @@
       window.URL.revokeObjectURL(url)
     }, 0);
   })
-
-  window.addEventListener('load' , function(){
-    console.log('canvas')
+  // setInterval(() => {
     
-    // setTimeout(()=>{
-    //   for(;1;){
-    // ctx.drawImage(video, 0, 0)
-    //   }
-    // // console.log('canvas')
-    // },1000)
+  // },1)
+
   })
 
 </script>
