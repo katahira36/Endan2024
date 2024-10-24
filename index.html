@@ -65,7 +65,8 @@
     
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
-    recorder = new MediaRecorder(stream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+    var Mediastream = ctx.captureStream()
+    recorder = new MediaRecorder(Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
     recorder.ondataavailable = function (e) {
       // var testvideo = document.getElementById('test')
       // testvideo.setAttribute('controls', '')
