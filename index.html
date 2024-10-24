@@ -70,8 +70,8 @@
 
   startbutton.addEventListener('click', function(ev){
     setTimeout(()=>{
-    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-  },0)
+    ctx.drawImage(video, 0, 0, video.width, video.height)
+    },0)
     recorder.start(10000)
     ev.preventDefault()
   }, false);
