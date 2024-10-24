@@ -47,7 +47,7 @@
   video.style = 'display:none'
 
   const ctx = movie.getContext("2d")
-  var Mediastream = ctx.captureStream()
+  var Mediastream = movie.captureStream()
   window.addEventListener('resize', function() {
     movie.width  = window.innerWidth
     movie.height = window.innerHeight
