@@ -15,7 +15,7 @@
 <body>
   
   <div class="camera">
-    <video id="video"></video>
+    <video id="video" width="400" height="300"></video>
     
     <!-- <video id="test" width="500" height="400" controls></video> -->
 </div><br>
@@ -122,7 +122,7 @@
   var move=0
 
   setInterval(() => {
-    // ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
     // console.log(video.clientWidth)
     // console.log(video.clientHeight)
     // console.log(movie.width)
