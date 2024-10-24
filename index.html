@@ -15,11 +15,11 @@
 <body>
   
   <div class="camera">
-    <video id="video" width="500" height="400"></video>
+    <video id="video"></video>
     
     <!-- <video id="test" width="500" height="400" controls></video> -->
 </div><br>
-<canvas id="movie" width="500" height="400"></canvas>
+<canvas id="movie"></canvas>
 
 
 
@@ -39,22 +39,22 @@
 
   var movie = document.getElementById("movie")
 
-  // video.width  = window.innerWidth
-  // video.height = window.innerHeight
-  // movie.width  = video.width
-  // movie.height = video.height
+  video.width  = window.innerWidth
+  video.height = window.innerHeight
+  movie.width  = video.width
+  movie.height = video.height
   
   video.style = 'display:none'
 
   const ctx = movie.getContext("2d")
   var Mediastream = movie.captureStream()   //iphon not
-  // window.addEventListener('resize', function() {
-  //   video.width  = window.innerWidth
-  //   video.height = window.innerHeight
-  //   movie.width  = video.width
-  //   movie.height = video.height
+  window.addEventListener('resize', function() {
+    video.width  = window.innerWidth
+    video.height = window.innerHeight
+    movie.width  = video.width
+    movie.height = video.height
     
-  // })
+  })
   console.log(video.height)
 
   var downloaddata = []
@@ -118,6 +118,10 @@
 
   setInterval(() => {
     ctx.drawImage(video, 0, 0)
+    console.log(video.width)
+    console.log(video.height)
+    console.log(movie.width)
+    console.log(movie.height)
     ctx.fillStyle="red";
     ctx.fillRect(140,65+move/5,20,20);
     move++
