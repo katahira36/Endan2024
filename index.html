@@ -62,6 +62,9 @@
     video.height = video.videoHeight
     movie.width  = video.videoWidth
     movie.height = window.videoHeight
+
+    console.log(video.videoWidth)
+    console.log(video.width)
   
 
     // var vdata = stream.getVideoTracks()
@@ -120,8 +123,8 @@
 
   setInterval(() => {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-    console.log(video.videoWidth)
-    console.log(video.width)
+    // console.log(video.videoWidth)
+    // console.log(video.width)
     // console.log(movie.width)
     // console.log(movie.height)
     ctx.fillStyle="red";
