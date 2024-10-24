@@ -83,10 +83,7 @@
   })
 
   startbutton.addEventListener('click', function(ev){
-    setTimeout(()=>{
-    ctx.drawImage(video, 0, 0)
-    // console.log('canvas')
-    },0)
+    
     recorder.start(10000)
     ev.preventDefault()
   }, false);
@@ -110,18 +107,16 @@
     }, 0);
   })
 
-  // window.addEventListener('load' , function(){
+  window.addEventListener('load' , function(){
     console.log('canvas')
-    // // $('#movie').attr('width', $('.wrapper').width())
-    // // $('#movie').attr('height', $('.wrapper').height())
-    // var movie = document.getElementById("movie")
-    // const ctx = movie.getContext("2d")
-    // // for(;1;){
-    //   setTimeout(() => {
-    //   ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-    // }, 1000);
-    // // }
-  // })
+    
+    // setTimeout(()=>{
+    //   for(;1;){
+    // ctx.drawImage(video, 0, 0)
+    //   }
+    // // console.log('canvas')
+    // },0)
+  })
 
 </script>
 </body>
