@@ -15,7 +15,7 @@
 <body>
   
   <div class="camera">
-    <video id="video" width="400" height="300"></video>
+    <video id="video"></video>
     
     <!-- <video id="test" width="500" height="400" controls></video> -->
 </div><br>
@@ -39,8 +39,8 @@
 
   var movie = document.getElementById("movie")
 
-  // video.width  = window.innerWidth
-  // video.height = window.innerHeight
+  video.width  = window.innerWidth
+  video.height = window.innerHeight
   movie.width  = window.innerWidth
   movie.height = window.innerHeight
   
@@ -48,8 +48,8 @@
 
   
   window.addEventListener('resize', function() {
-  //   video.width  = window.innerWidth
-  //   video.height = window.innerHeight
+    video.width  = window.innerWidth
+    video.height = window.innerHeight
     movie.width  = window.innerWidth
     movie.height = window.innerHeight
   })
@@ -123,8 +123,8 @@
 
   setInterval(() => {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-    // console.log(video.clientWidth)
-    // console.log(video.clientHeight)
+    console.log(video.videoWidth)
+    console.log(video.width)
     // console.log(movie.width)
     // console.log(movie.height)
     ctx.fillStyle="red";
