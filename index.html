@@ -66,6 +66,9 @@
   .then(function (stream) {
     video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
     video.play()
+
+    var vdata = stream.getVideoTracks()
+    console.log(vdata.getCapabilities())
     
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
@@ -118,11 +121,11 @@
   var move=0
 
   setInterval(() => {
-    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
-    console.log(video.clientWidth)
-    console.log(video.clientHeight)
-    console.log(movie.width)
-    console.log(movie.height)
+    // ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    // console.log(video.clientWidth)
+    // console.log(video.clientHeight)
+    // console.log(movie.width)
+    // console.log(movie.height)
     ctx.fillStyle="red";
     ctx.fillRect(140,65+move/5,20,20);
     move++
