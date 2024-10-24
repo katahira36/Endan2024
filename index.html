@@ -68,7 +68,7 @@
     video.play()
 
     var vdata = stream.getVideoTracks()
-    console.log(vdata.getCapabilities())
+    console.log(vdata.getConstraints())
     
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
