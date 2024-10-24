@@ -58,15 +58,6 @@
   .then(function (stream) {
     video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
     video.play()
-    video.width  = video.videoWidth
-    video.height = video.videoHeight
-    movie.width  = video.videoWidth
-    movie.height = window.videoHeight
-
-    console.log(video.videoWidth)
-    console.log(video.width)
-  
-
     // var vdata = stream.getVideoTracks()
     // var videodata =vdata.getSettings().facingMode
     // console.log(videodata)
@@ -120,15 +111,16 @@
   })
 
   var move=0
-  video.width  = video.videoWidth
+  
+
+  setInterval(() => {
+    video.width  = video.videoWidth
     video.height = video.videoHeight
     movie.width  = video.videoWidth
     movie.height = window.videoHeight
 
     console.log(video.videoWidth)
     console.log(video.width)
-
-  setInterval(() => {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
     // console.log(video.videoWidth)
     // console.log(video.width)
