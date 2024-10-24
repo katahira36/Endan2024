@@ -46,8 +46,7 @@
   
   video.style = 'display:none'
 
-  const ctx = movie.getContext("2d")
-  var Mediastream = movie.captureStream()   //iphon not
+  
   window.addEventListener('resize', function() {
     video.width  = window.innerWidth
     video.height = window.innerHeight
@@ -56,6 +55,9 @@
     
   })
   console.log(video.height)
+
+  const ctx = movie.getContext("2d")
+  var Mediastream = movie.captureStream()   //iphon not
 
   var downloaddata = []
   let str = 0;
