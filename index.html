@@ -38,22 +38,23 @@
   var constrains = { video: true, audio: true, facingMode: "user" }// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
-  console.log(video.height)
+  
   movie.width  = window.innerWidth
   movie.height = window.innerHeight
   
-  video.width  = window.innerWidth
-  video.height = window.innerHeight
+  video.width  = movie.width
+  video.height = movie.height
   video.style = 'display:none'
 
   const ctx = movie.getContext("2d")
-  var Mediastream = movie.captureStream()
+  var Mediastream = movie.captureStream()   //iphon not
   window.addEventListener('resize', function() {
     movie.width  = window.innerWidth
     movie.height = window.innerHeight
     video.width  = window.innerWidth
     video.height = window.innerHeight
   })
+  console.log(video.height)
 
   var downloaddata = []
   let str = 0;
@@ -115,7 +116,7 @@
   var move=0
 
   setInterval(() => {
-    ctx.drawImage(video, 0, 0)
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
     ctx.fillStyle="red";
     ctx.fillRect(140,65+move/5,20,20);
     move++
