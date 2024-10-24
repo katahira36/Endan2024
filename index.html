@@ -109,10 +109,14 @@
       window.URL.revokeObjectURL(url)
     }, 0);
   })
+
+  var move=0
+
   setInterval(() => {
     ctx.drawImage(video, 0, 0)
     ctx.fillStyle="red";
-    ctx.fillRect(140,65,20,20);
+    ctx.fillRect(140,65+move*5,20,20);
+    move++
   },1)
 
   })
