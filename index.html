@@ -47,6 +47,7 @@
   video.style = 'display:none'
 
   const ctx = movie.getContext("2d")
+  var Mediastream = ctx.captureStream()
   window.addEventListener('resize', function() {
     movie.width  = window.innerWidth
     movie.height = window.innerHeight
@@ -65,7 +66,7 @@
     
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
-    var Mediastream = ctx.captureStream()
+    
     recorder = new MediaRecorder(Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
     recorder.ondataavailable = function (e) {
       // var testvideo = document.getElementById('test')
