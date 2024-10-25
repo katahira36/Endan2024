@@ -80,15 +80,26 @@ var constrains = {
   var curSTREAM = null
 
   window.addEventListener('load' , function(){
- 
- navigator.mediaDevices.getUserMedia(constrains)
+
+ setTimeout(()=>{
+ navigator.mediaDevices.getUserMedia({ 
+    video: true, 
+    audio: true, 
+    facingMode:"user" 
+  })
   .then(function (stream0) {
     curSTREAM = stream0
     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
     video.play()
-    curSTREAM.getVideoTracks().forEach( (camera) => {
-      camera.stop();
-    });
+    // curSTREAM.getVideoTracks().forEach( (camera) => {
+    //   camera.stop();
+    // });
+  })
+},10000)
+
+.catch(function(err) {
+    console.log("An error occured! " + err)
+})
 
   constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
@@ -124,11 +135,7 @@ var constrains = {
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-})
 
-.catch(function(err) {
-    console.log("An error occured! " + err)
-})
 
   startbutton.addEventListener('click', function(ev){
     
