@@ -70,7 +70,7 @@ var flag=0;
 var constrains = { 
     video: true, 
     audio: true, 
-    facingMode:"user" 
+    facingMode:{ exact: "environment" } 
   }// 映像・音声を取得するかの設定
 
 
@@ -81,29 +81,33 @@ var constrains = {
 
   window.addEventListener('load' , function(){
 
- setTimeout(()=>{
- navigator.mediaDevices.getUserMedia({ 
-    video: true, 
-    audio: true, 
-    facingMode:"user" 
-  })
-  .then(function (stream0) {
-    curSTREAM = stream0
-    video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
-    video.play()
-    // curSTREAM.getVideoTracks().forEach( (camera) => {
-    //   camera.stop();
-    // });
-  })
-.catch(function(err) {
-    console.log("An error occured! " + err)
-})
-},10000)
+//  setTimeout(()=>{
+//  navigator.mediaDevices.getUserMedia({ 
+//     video: true, 
+//     audio: true, 
+//     facingMode:"user" 
+//   })
+//   .then(function (stream0) {
+//     curSTREAM = stream0
+//     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+//     video.play()
+//     // curSTREAM.getVideoTracks().forEach( (camera) => {
+//     //   camera.stop();
+//     // });
+//   })
+// .catch(function(err) {
+//     console.log("An error occured! " + err)
+// })
+// },10000)
 
-  constrains.video.facingMode ={ exact: "environment" };
+  // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     console.log(constrains)
-    navigator.mediaDevices.getUserMedia(constrains)
+    navigator.mediaDevices.getUserMedia({ 
+    video: true, 
+    audio: true, 
+    facingMode:{ exact: "environment" } 
+  })
   .then(function (stream) {
     curSTREAM = stream
     video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
