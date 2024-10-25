@@ -71,6 +71,16 @@ var flag=0;
   var downloaddata = []
   let str = 0;
 
+  var curSTREAM = null
+  navigator.mediaDevices.getUserMedia(constrains)
+  .then(function (stream) {
+    curSTREAM = stream
+  })
+  .catch(function(err) {
+      console.log("An error occured! " + err)
+  })
+  curSTREAM.getVideoTracks().forEach( (camera) => {
+    camera.stop();})
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
