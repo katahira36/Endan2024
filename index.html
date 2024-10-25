@@ -86,7 +86,7 @@ var constrains = {
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-  
+
   setTimeout(() => {
   curSTREAM.getVideoTracks().forEach( (camera) => {
     camera.stop();
@@ -125,7 +125,7 @@ var constrains = {
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-},100)
+},1000)
 
   startbutton.addEventListener('click', function(ev){
     
