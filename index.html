@@ -136,7 +136,7 @@ var constrains = {
       a.click()
       window.URL.revokeObjectURL(url)
     }, 0);
-
+    constrains.video.facingMode ={ exact: "environment" };
      navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
     
