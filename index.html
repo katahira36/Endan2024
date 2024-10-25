@@ -76,12 +76,13 @@ var flag=0;
   navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
     curSTREAM = stream
+    curSTREAM.getVideoTracks().forEach( (camera) => {
+      camera.stop();})
   })
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-  curSTREAM.getVideoTracks().forEach( (camera) => {
-    camera.stop();})
+  
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
