@@ -78,11 +78,8 @@ var flag=0;
     curSTREAM = stream
     curSTREAM.getVideoTracks().forEach( (camera) => {
       camera.stop();})
-  })
-  .catch(function(err) {
-      console.log("An error occured! " + err)
-  })
-  constrains.video.facingMode ={ exact: "environment" };
+
+      constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
@@ -114,6 +111,11 @@ var flag=0;
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
+  })
+  .catch(function(err) {
+      console.log("An error occured! " + err)
+  })
+  
 
   startbutton.addEventListener('click', function(ev){
     
