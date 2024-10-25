@@ -55,7 +55,7 @@ var flag=0;
 var constrains = { 
     video: true, 
     audio: true, 
-    facingMode:{ exact: "environment" } 
+    facingMode:{ exact: null } 
   }// 映像・音声を取得するかの設定
 
 
@@ -85,7 +85,7 @@ var constrains = {
 
 
 
-  // constrains.video.facingMode ={ exact: "environment" };
+  constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     
     console.log(constrains)
