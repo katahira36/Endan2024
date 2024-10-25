@@ -84,6 +84,10 @@ var constrains = {
  navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
     curSTREAM = stream
+    curSTREAM.getVideoTracks().forEach( (camera) => {
+      camera.stop();
+    });
+    
   constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     console.log(constrains)
