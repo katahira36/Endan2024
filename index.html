@@ -30,8 +30,8 @@
 
 
 <script>
-  window.addEventListener('load' , function(){
-  var startbutton = document.getElementById('start')
+  
+   var startbutton = document.getElementById('start')
   var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
   var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
@@ -78,6 +78,8 @@ var constrains = {
   let str = 0;
 
   var curSTREAM = null
+  window.addEventListener('load' , function(){
+ 
  
   constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
