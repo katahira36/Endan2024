@@ -15,7 +15,7 @@
 <body>
   
   <div class="camera">
-    <video id="video" muted="true"></video>
+    <video id="video"></video>
     
     <!-- <video id="test" width="500" height="400" controls></video> -->
 </div><br>
@@ -35,7 +35,7 @@
   var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
   var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
-  var constrains = { video: true, audio: true, facingMode: "environment" }// 映像・音声を取得するかの設定
+  var constrains = { video: true, audio: true, facingMode:{exact: "environment" }}// 映像・音声を取得するかの設定
 
   var movie = document.getElementById("movie")
 
