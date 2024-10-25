@@ -82,12 +82,14 @@ var constrains = {
   window.addEventListener('load' , function(){
  
  navigator.mediaDevices.getUserMedia(constrains)
-  .then(function (stream) {
-    curSTREAM = stream
+  .then(function (stream0) {
+    curSTREAM = stream0
+    video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+    video.play()
     curSTREAM.getVideoTracks().forEach( (camera) => {
       camera.stop();
     });
-    
+
   constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     console.log(constrains)
