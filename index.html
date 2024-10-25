@@ -82,7 +82,7 @@ var flag=0;
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-  
+  CONSTRAINTS.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
