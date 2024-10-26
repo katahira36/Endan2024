@@ -56,25 +56,25 @@ var constrains = {
 
   var movie = document.getElementById("movie")
 
-  var nvUA = navigator.userAgent
+//   var nvUA = navigator.userAgent
 
-var cutSt,cutEd;
-//バージョン番号を格納する変数
-var bwVer;
-//ブラウザ名+バージョン番号にする変数
-var bw;
-//大抵はuserAgentの一番最後にそれぞれのブラウザ名とバージョン番号がある。
-//なので文字列カット終点デフォルトは末尾にする。
-cutEd   = nvUA.length;
+// var cutSt,cutEd;
+// //バージョン番号を格納する変数
+// var bwVer;
+// //ブラウザ名+バージョン番号にする変数
+// var bw;
+// //大抵はuserAgentの一番最後にそれぞれのブラウザ名とバージョン番号がある。
+// //なので文字列カット終点デフォルトは末尾にする。
+// cutEd   = nvUA.length;
 
-var flag=0;
-  const ctx = movie.getContext("2d")
-  if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
-{
-  var Mediastream = movie.captureStream()   //iphon not
-}else{
-  flag=1;
-}
+// var flag=0;
+//   const ctx = movie.getContext("2d")
+//   if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
+// {
+//   var Mediastream = movie.captureStream()   //iphon not
+// }else{
+//   flag=1;
+// }
 
 
 
@@ -106,7 +106,7 @@ var flag=0;
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
     
-    recorder = new MediaRecorder((flag)?stream:Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+    recorder = new MediaRecorder(/*(flag)?*/stream/*:Mediastream*/, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
     recorder.ondataavailable = function (e) {
       // var testvideo = document.getElementById('test')
       // testvideo.setAttribute('controls', '')
