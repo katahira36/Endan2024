@@ -1,51 +1,197 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>CAMERA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
-  <link rel="stylesheet" type="text/css" href="camera.css" />
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" charset='utf-8'.> -->
+  <meta charset='utf8'>
+  <style >.hogehoge {
+    padding: 20px;
+    margin: 20px;
+  }
+  /* .wrapper{
+  width: 100%;
+  height: 100%;
+} */
+  </style>
 </head>
 <body>
-  <div id="main">
-    <button id="btn_shot" onclick="func_shot()">撮影</button>
-    <div id="video_frame">
-      <video id="video" autoplay playsinline></video>
-      <script>
-        const medias = {
-          audio: false,
-          video: {
-              facingMode: 'environment', //メインカメラ
-            width: { min: 1024, ideal: 1920, max: 2436 },
-            height: { min: 776, ideal: 1080, max: 1125 }
-          }
-        };
-        const video = document.getElementById("video");
-        const promise = navigator.mediaDevices.getUserMedia(medias);
+  
+  <div class="camera">
+    <video id="video" autoplay playsinline></video>
+    
+    <!-- <video id="test" width="500" height="400" controls></video> -->
+</div><br>
+<canvas id="movie" ></canvas>
 
-        promise.then(function(stream){
-          /* 成功 */
-          video.srcObject = stream;
-        })
-        .catch(function(err) {
-          /* エラーをハンドル */
-        });
 
-        function func_shot(){
-          var canvas = document.getElementById('myCanvas');
-          var ctx    = canvas.getContext('2d');
-          var width  = video.offsetWidth;
-          var height = video.offsetHeight;
-          canvas.setAttribute('width' , width);
-          canvas.setAttribute('height', height);
-          ctx.drawImage(video, 0, 0, width, height);
-          //画像をJPEGにしたいとき（これをformでPOSTしたりすればいいです）
-          var imageData = canvas.toDataURL("image/jpg");
-        }
 
-      </script>
-      <canvas id="myCanvas"></canvas>
-    </div>
-  </div>
+<button class="hogehoge" type="button" id="start">start</button>
+<button class="hogehoge" type="button" id="stop">stop</button>
+<!-- <botton type="button" id="download">dl</botton> -->
+
+
+
+<script>
+var constrains = { 
+    video: {facingMode:{ exact:  "environment"} }, 
+    audio: true
+
+  }
+
+
+  
+// 映像・音声を取得するかの設定
+
+  var downloaddata = []
+  let str = 0;
+
+  var curSTREAM = null
+
+  window.addEventListener('load' , function(){
+    var startbutton = document.getElementById('start')
+  var stopbutton  = document.getElementById('stop')
+  // var downloadbutton = document.getElementById('download')
+  var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
+  
+
+  var movie = document.getElementById("movie")
+
+//   var nvUA = navigator.userAgent
+
+// var cutSt,cutEd;
+// //バージョン番号を格納する変数
+// var bwVer;
+// //ブラウザ名+バージョン番号にする変数
+// var bw;
+// //大抵はuserAgentの一番最後にそれぞれのブラウザ名とバージョン番号がある。
+// //なので文字列カット終点デフォルトは末尾にする。
+// cutEd   = nvUA.length;
+
+// var flag=0;
+  const ctx = movie.getContext("2d")
+//   if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
+// {
+//   var Mediastream = movie.captureStream()   //iphon not
+// }else{
+//   flag=1;
+// }
+
+
+
+  video.width  = window.innerWidth
+  video.height = window.innerHeight
+  movie.width  = window.innerWidth
+  movie.height = window.innerHeight
+  
+  // video.style = 'display:none'
+  // video.muted = 'true'
+  console.log(video.height)
+
+
+
+
+  // constrains.video.facingMode ={ exact: "environment" };
+    // まずはユーザーのカメラ・マイクへのアクセスを実施
+    
+    console.log(constrains)
+    navigator.mediaDevices.getUserMedia(constrains)
+  .then(function (stream) {
+    curSTREAM = stream
+    video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+    video.play()
+    // var vdata = stream.getVideoTracks()
+    // var videodata =vdata.getSettings().facingMode
+    // console.log(videodata)
+    
+    const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
+    // console.log(mine)
+    
+    recorder = new MediaRecorder(/*(flag)?*/stream/*:Mediastream*/, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+    recorder.ondataavailable = function (e) {
+      // var testvideo = document.getElementById('test')
+      // testvideo.setAttribute('controls', '')
+      // testvideo.setAttribute('width', 500)
+      // testvideo.setAttribute('height', 400)
+      // var outputdata = window.URL.createObjectURL(e.data) // videoタグが扱えるように、記録データを加工
+      // testvideo.src = outputdata // テスト用のビデオのソースに記録データを設置
+      if(e.data){
+      downloaddata.push(e.data)
+      console.log("dl")
+      }
+    }
+    
+  })
+
+  .catch(function(err) {
+      console.log("An error occured! " + err)
+  })
+
+
+  startbutton.addEventListener('click', function(ev){
+    
+    recorder.start(10000)
+    ev.preventDefault()
+  }, false);
+
+  stopbutton.addEventListener('click', function(ev) {
+    recorder.stop()
+    
+    setTimeout(() => {
+      console.log(downloaddata)
+      var blob = new Blob(downloaddata, { type:  "video/webm"})// 録画ファイルをblob形式に出力
+      var url = window.URL.createObjectURL(blob) // データにアクセスするためのURLを作成
+      downloaddata = []
+      var a = document.createElement('a') // download属性を持ったaタグをクリックするとダウンロードができるので、それをシミュレートする
+      document.body.appendChild(a)
+      a.style = 'display:none'
+      a.href = url;
+      a.download =  'test' + str + '.webm'
+      str++
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }, 0);
+
+//     navigator.mediaDevices.getUserMedia({ 
+//     video: true, 
+//     audio: true, 
+//     facingMode:{ exact: "environment" }
+//   })
+//   .then(function (stream0) {
+//     curSTREAM = stream0
+//     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+//     video.play()
+//     // curSTREAM.getVideoTracks().forEach( (camera) => {
+//     //   camera.stop();
+//     // });
+//   })
+// .catch(function(err) {
+//     console.log("An error occured! " + err)
+// })
+    
+  })
+
+  var move=0
+  
+
+  setInterval(() => {
+    video.width  = video.videoWidth
+    video.height = video.videoHeight
+    // movie.width  = video.videoWidth
+    // movie.height = video.videoHeight
+
+    // console.log(video.videoWidth)
+    // console.log(video.width)
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height)
+    // console.log(video.videoWidth)
+    // console.log(video.width)
+    // console.log(movie.width)
+    // console.log(movie.height)
+    ctx.fillStyle="red";
+    ctx.fillRect(140,65+move/5,20,20);
+    move++
+  },1)
+
+  })
+
+</script>
 </body>
 </html>
