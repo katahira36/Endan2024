@@ -6,7 +6,7 @@
 <body>
 <div id="contents">
 <video id="camera"></video>
-<canvas id="canvas" ></canvas>
+<!-- <canvas id="canvas" ></canvas> -->
 </div>
 <script>
 var CONSTRAINTS = {
@@ -20,17 +20,17 @@ var CONSTRAINTS = {
     //   facingMode: { exact: "environment" }  // リアカメラを利用する
   }
 };
-var curSTREAM = null;
+// var curSTREAM = null;
 window.onload = () => {
 var video = document.getElementById("camera")
-var movie = document.getElementById("canvas")
+// var movie = document.getElementById("canvas")
 
-video.style = 'display:none'
+// video.style = 'display:none'
 
-const ctx = movie.getContext("2d")
+// const ctx = movie.getContext("2d")
 navigator.mediaDevices.getUserMedia(CONSTRAINTS)
     .then( (stream) => {
-      curSTREAM = stream;   // 前後の切り替え用に保持
+      // curSTREAM = stream;   // 前後の切り替え用に保持
 
       // <video>とStremaを接続
       video.srcObject = stream;
@@ -42,9 +42,9 @@ navigator.mediaDevices.getUserMedia(CONSTRAINTS)
       console.log(`${err.name}: ${err.message}`);
       alert("カメラとの接続時にエラーが発生しました");
     });
-setInterval(() => {
- ctx.drawImage(video, 0, 0)
-},1)
+// setInterval(() => {
+//  ctx.drawImage(video, 0, 0)
+// },1)
 }
 </script>
 </body>
