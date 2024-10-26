@@ -82,7 +82,7 @@ var constrains = {
   movie.width  = window.innerWidth
   movie.height = window.innerHeight
   
-  // video.style = 'display:none'
+  video.style = 'display:none'
   // video.muted = 'true'
   console.log(video.height)
 
@@ -105,7 +105,7 @@ var constrains = {
     const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
     // console.log(mine)
     
-    recorder = new MediaRecorder(/*(flag)?*/stream/*:Mediastream*/, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+    recorder = new MediaRecorder(/*(flag)?stream:*/Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
     recorder.ondataavailable = function (e) {
       // var testvideo = document.getElementById('test')
       // testvideo.setAttribute('controls', '')
@@ -176,7 +176,7 @@ var constrains = {
     video.width  = video.videoWidth
     video.height = video.videoHeight
     // movie.width  = video.videoWidth
-    // movie.height = video.videoHeight
+    movie.height = movie.width *video.videoHeight /video.videoWidth
 
     // console.log(video.videoWidth)
     // console.log(video.width)
