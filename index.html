@@ -77,8 +77,8 @@ var constrains = {
 
 
 
-  video.width  = window.innerWidth
-  video.height = window.innerHeight
+video.width  = window.innerWidth
+video.height = window.innerHeight
   movie.width  = window.innerWidth
   movie.height = window.innerHeight
   
@@ -99,6 +99,29 @@ var constrains = {
     curSTREAM = stream
     video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
     video.play()
+    const videoTrack = stream.getVideoTracks()[0];
+
+    // ビデオトラックの設定を取得
+    const settings = videoTrack.getSettings();
+
+    // カメラの解像度を取得
+    video.width  = settings.width;
+    video.height = settings.height;
+    movie.height = movie.width *video.height /video.width
+
+    function drawCameraToCanvas() {
+          // 現在のフレームを<canvas>に描画
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          // 再度次のフレームを描画するためにrequestAnimationFrameを使う
+          requestAnimationFrame(drawCameraToCanvas);
+        }
+
+        // 映像の準備ができたら描画開始
+        video.onplaying = () => {
+          drawCameraToCanvas();
+        };
+    
     // var vdata = stream.getVideoTracks()
     // var videodata =vdata.getSettings().facingMode
     // console.log(videodata)
@@ -175,8 +198,7 @@ var constrains = {
   
   // video.width  = video.videoWidth
   //   video.height = video.videoHeight
-  //   // movie.width  = video.videoWidth
-  //   movie.height = movie.width *video.videoHeight /video.videoWidth
+   
 
   // setInterval(() => {
     
