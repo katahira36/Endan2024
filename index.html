@@ -12,6 +12,7 @@
   height: 100%;
 } */
   </style>
+  <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
 </head>
 <body>
   
@@ -21,6 +22,7 @@
     <!-- <video id="test" width="500" height="400" controls></video> -->
 </div><br>
 <canvas id="movie" ></canvas>
+<canvas id="canvas"></canvas>
 
 
 
@@ -33,7 +35,7 @@
 <script>
 var constrains = { 
     video: {facingMode:{ exact:  "user"} }, 
-    audio: true
+
 
   }
 
@@ -54,6 +56,7 @@ var constrains = {
   
 
   var movie = document.getElementById("movie")
+  var canvas = document.getElementById("canvas")
 
 //   var nvUA = navigator.userAgent
 
@@ -70,7 +73,7 @@ var constrains = {
   const ctx = movie.getContext("2d")
 //   if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
 // {
-//   var Mediastream = movie.captureStream()   //iphon not
+  var Mediastream = movie.captureStream()   //iphon not
 // }else{
 //   flag=1;
 // }
@@ -84,6 +87,7 @@ video.height = window.innerHeight
   
   video.style = 'display:none'
   video.muted = 'true'
+  movie.style = 'display:none'
   
   // console.log(video.videoHeight)
 
@@ -92,7 +96,8 @@ video.height = window.innerHeight
 
   // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
-    
+    function onOpenCvReady() {
+      console.log("OpenCV.jsが準備完了");
     console.log(constrains)
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
@@ -109,10 +114,39 @@ video.height = window.innerHeight
     video.height = settings.height;
     console.log(video.height)
     movie.height = movie.width *video.height /video.width
+    canvas.width = movie.width
+    canvas.height = movie.height
 
     function drawCameraToCanvas() {
           // 現在のフレームを<canvas>に描画
           ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
+
+          let src = cv.imread(movie);
+        let dst = new cv.Mat();
+        
+        // グレースケールに変換（特徴点検出に適した前処理）
+        cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY);
+
+        // ORB検出器を作成
+        let orb = new cv.ORB();
+        let keypoints = new cv.KeyPointVector();
+        let descriptors = new cv.Mat();
+
+        // 特徴点を検出
+        orb.detectAndCompute(src, new cv.Mat(), keypoints, descriptors);
+
+        // 特徴点を画像に描画
+        cv.drawKeypoints(src, keypoints, dst);
+
+        // 結果をCanvasに描画
+        cv.imshow(canvas, dst);
+
+        // メモリの解放
+        src.delete();
+        dst.delete();
+        keypoints.delete();
+        descriptors.delete();
+        orb.delete();
 
           // 再度次のフレームを描画するためにrequestAnimationFrameを使う
           requestAnimationFrame(drawCameraToCanvas);
@@ -122,7 +156,7 @@ video.height = window.innerHeight
         video.onplaying = () => {
           drawCameraToCanvas();
         };
-    
+        
     // var vdata = stream.getVideoTracks()
     // var videodata =vdata.getSettings().facingMode
     // console.log(videodata)
@@ -149,6 +183,7 @@ video.height = window.innerHeight
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
+}
 
 
   startbutton.addEventListener('click', function(ev){
