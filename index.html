@@ -122,6 +122,7 @@ video.height = window.innerHeight
           ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
 
           let src = cv.imread(movie);
+          let cav = cv.imread(movie);
         let dst = new cv.Mat();
         
         // グレースケールに変換（特徴点検出に適した前処理）
@@ -136,7 +137,7 @@ video.height = window.innerHeight
         orb.detectAndCompute(src, new cv.Mat(), keypoints, descriptors);
 
         // 特徴点を画像に描画
-        cv.drawKeypoints(src, keypoints, dst);
+        cv.drawKeypoints(cav, keypoints, dst);
 
         // 結果をCanvasに描画
         cv.imshow(canvas, dst);
