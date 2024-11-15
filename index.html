@@ -146,7 +146,9 @@ video.height = window.innerHeight
         cv.drawKeypoints(src, keypoints, dst);
 
         // 結果をCanvasに描画
-        cv.imshow(canvas, dst);
+        cv.imshow(movie, dst);
+
+        ctx.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
 
         // メモリの解放
         src.delete();
