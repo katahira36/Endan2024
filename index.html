@@ -34,8 +34,8 @@
 
 <script>
 var constrains = { 
-    // video: {facingMode:{ exact:  "user"} } 
-    video: {facingMode:{ exact:  "environment"} } 
+    video: {facingMode:{ exact:  "user"} } 
+    // video: {facingMode:{ exact:  "environment"} } 
 
   }
 
@@ -130,10 +130,11 @@ video.height = window.innerHeight
 
           let src = cv.imread(movie);
           // let cav = cv.imread(movie);
+          let gray = new cv.Mat();
         let dst = new cv.Mat();
         
         // グレースケールに変換（特徴点検出に適した前処理）
-        cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY);
+        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
         // ORB検出器を作成
         let orb = new cv.ORB();
@@ -141,7 +142,12 @@ video.height = window.innerHeight
         let descriptors = new cv.Mat();
 
         // 特徴点を検出
-        orb.detectAndCompute(src, new cv.Mat(), keypoints, descriptors);
+        orb.detectAndCompute(gray, new cv.Mat(), keypoints, descriptors);
+
+        for (let i = 0; i < keypoints.size(); i++) {
+        const point = keypoints.get(i).pt;
+        console.log(`特徴点 ${i}: x=${point.x}, y=${point.y}`);
+        }
 
         // 特徴点を画像に描画
         cv.drawKeypoints(src, keypoints, dst);
@@ -153,6 +159,7 @@ video.height = window.innerHeight
 
         // メモリの解放
         src.delete();
+        gray.delete();
         dst.delete();
         keypoints.delete();
         descriptors.delete();
@@ -239,8 +246,8 @@ cv.onRuntimeInitialized = onOpenCvReady;
     
   })
 
-  var move=0
-  var flagc = 0
+  // var move=0
+  // var flagc = 0
   
   // video.width  = video.videoWidth
   //   video.height = video.videoHeight
