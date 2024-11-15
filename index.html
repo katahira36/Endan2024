@@ -110,8 +110,11 @@ video.height = window.innerHeight
     const settings = videoTrack.getSettings();
 
     // カメラの解像度を取得
-    video.width  = settings.width;
-    video.height = settings.height;
+    // video.width  = settings.width;
+    // video.height = settings.height;
+    video.width  = 400;
+    video.height = 300;
+
     console.log(video.height)
     movie.height = movie.width *video.height /video.width
     canvas.width = movie.width
