@@ -136,6 +136,9 @@ video.height = window.innerHeight
         // グレースケールに変換（特徴点検出に適した前処理）
         cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
+        let equalized = new cv.Mat();
+        cv.equalizeHist(gray, equalized);
+
         // ORB検出器を作成
         let orb = new cv.ORB();
         let keypoints = new cv.KeyPointVector();
@@ -161,6 +164,7 @@ video.height = window.innerHeight
         src.delete();
         gray.delete();
         dst.delete();
+        equalized.delete();
         keypoints.delete();
         descriptors.delete();
         orb.delete();
