@@ -71,6 +71,7 @@ var constrains = {
 
 // var flag=0;
   const ctx = movie.getContext("2d")
+  const cty = canvas.getElementById("2d")
 //   if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
 // {
   var Mediastream = movie.captureStream()   //iphon not
@@ -148,7 +149,7 @@ video.height = window.innerHeight
         // 結果をCanvasに描画
         cv.imshow(movie, dst);
 
-        ctx.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
+        cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
 
         // メモリの解放
         src.delete();
