@@ -42,6 +42,8 @@ var constrains = {
 
   let prevGray = null;
   let prevPoints = null;
+  let startGray = null;
+  let startPoint = null;
 // 映像・音声を取得するかの設定
 
   var downloaddata = []
@@ -156,15 +158,17 @@ video.height = window.innerHeight
         // // 特徴点を画像に描画
         // cv.drawKeypoints(src, keypoints, dst);
 
-        if (prevGray === null) {
+        if (startGray === null) {
           prevGray = equalized.clone();
           prevPoints = new cv.Mat();
           cv.goodFeaturesToTrack(prevGray, prevPoints, 100, 0.3, 7);
+          startGray = prevGray.clone();
+          startPoint = prevPoints.clone();
         } else{
           const nextPoints = new cv.Mat();
           const status = new cv.Mat();
           const err = new cv.Mat();
-          cv.calcOpticalFlowPyrLK(prevGray, equalized, prevPoints, nextPoints, status, err);
+          cv.calcOpticalFlowPyrLK(startGray, equalized, startPoints, nextPoints, status, err);
 
           for (let i = 0; i < nextPoints.rows; i++) {
             if (status.data[i] === 1) {
@@ -175,11 +179,13 @@ video.height = window.innerHeight
             }
           }
 
+          startGray.delete();
+          startPoints.delete();
+          startGray = gray.clone();
+          startPoints = nextPoints.clone();
+
           prevGray.delete();
           prevPoints.delete();
-          prevGray = gray.clone();
-          prevPoints = nextPoints.clone();
-
           nextPoints.delete();
           status.delete();
           err.delete();
