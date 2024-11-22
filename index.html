@@ -43,7 +43,7 @@ var constrains = {
   let prevGray = null;
   let prevPoints = null;
   let startGray = null;
-  let startPoint = null;
+  let startPoints = null;
 // 映像・音声を取得するかの設定
 
   var downloaddata = []
@@ -163,7 +163,7 @@ video.height = window.innerHeight
           prevPoints = new cv.Mat();
           cv.goodFeaturesToTrack(prevGray, prevPoints, 100, 0.3, 7);
           startGray = prevGray.clone();
-          startPoint = prevPoints.clone();
+          startPoints = prevPoints.clone();
         } else{
           const nextPoints = new cv.Mat();
           const status = new cv.Mat();
