@@ -208,22 +208,22 @@ video.height = window.innerHeight
     // var videodata =vdata.getSettings().facingMode
     // console.log(videodata)
     
-    const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
-    // console.log(mine)
+  //   const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
+  //   // console.log(mine)
     
-    recorder = new MediaRecorder(/*(flag)?stream:*/Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
-    recorder.ondataavailable = function (e) {
-      // var testvideo = document.getElementById('test')
-      // testvideo.setAttribute('controls', '')
-      // testvideo.setAttribute('width', 500)
-      // testvideo.setAttribute('height', 400)
-      // var outputdata = window.URL.createObjectURL(e.data) // videoタグが扱えるように、記録データを加工
-      // testvideo.src = outputdata // テスト用のビデオのソースに記録データを設置
-      if(e.data){
-      downloaddata.push(e.data)
+  //   recorder = new MediaRecorder(/*(flag)?stream:*/Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+  //   recorder.ondataavailable = function (e) {
+  //     // var testvideo = document.getElementById('test')
+  //     // testvideo.setAttribute('controls', '')
+  //     // testvideo.setAttribute('width', 500)
+  //     // testvideo.setAttribute('height', 400)
+  //     // var outputdata = window.URL.createObjectURL(e.data) // videoタグが扱えるように、記録データを加工
+  //     // testvideo.src = outputdata // テスト用のビデオのソースに記録データを設置
+  //     if(e.data){
+  //     downloaddata.push(e.data)
       console.log("dl")
-      }
-    }
+  //     }
+  //   }
     
   })
 
@@ -233,48 +233,48 @@ video.height = window.innerHeight
 }
 cv.onRuntimeInitialized = onOpenCvReady;
 
-  startbutton.addEventListener('click', function(ev){
+//   startbutton.addEventListener('click', function(ev){
     
-    recorder.start(10000)
-    ev.preventDefault()
-  }, false);
+//     recorder.start(10000)
+//     ev.preventDefault()
+//   }, false);
 
-  stopbutton.addEventListener('click', function(ev) {
-    recorder.stop()
+//   stopbutton.addEventListener('click', function(ev) {
+//     recorder.stop()
     
-    setTimeout(() => {
-      console.log(downloaddata)
-      var blob = new Blob(downloaddata, { type:  "video/webm"})// 録画ファイルをblob形式に出力
-      var url = window.URL.createObjectURL(blob) // データにアクセスするためのURLを作成
-      downloaddata = []
-      var a = document.createElement('a') // download属性を持ったaタグをクリックするとダウンロードができるので、それをシミュレートする
-      document.body.appendChild(a)
-      a.style = 'display:none'
-      a.href = url;
-      a.download =  'test' + str + '.webm'
-      str++
-      a.click()
-      window.URL.revokeObjectURL(url)
-    }, 0);
+//     setTimeout(() => {
+//       console.log(downloaddata)
+//       var blob = new Blob(downloaddata, { type:  "video/webm"})// 録画ファイルをblob形式に出力
+//       var url = window.URL.createObjectURL(blob) // データにアクセスするためのURLを作成
+//       downloaddata = []
+//       var a = document.createElement('a') // download属性を持ったaタグをクリックするとダウンロードができるので、それをシミュレートする
+//       document.body.appendChild(a)
+//       a.style = 'display:none'
+//       a.href = url;
+//       a.download =  'test' + str + '.webm'
+//       str++
+//       a.click()
+//       window.URL.revokeObjectURL(url)
+//     }, 0);
 
-//     navigator.mediaDevices.getUserMedia({ 
-//     video: true, 
-//     audio: true, 
-//     facingMode:{ exact: "environment" }
-//   })
-//   .then(function (stream0) {
-//     curSTREAM = stream0
-//     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
-//     video.play()
-//     // curSTREAM.getVideoTracks().forEach( (camera) => {
-//     //   camera.stop();
-//     // });
-//   })
-// .catch(function(err) {
-//     console.log("An error occured! " + err)
-// })
+// //     navigator.mediaDevices.getUserMedia({ 
+// //     video: true, 
+// //     audio: true, 
+// //     facingMode:{ exact: "environment" }
+// //   })
+// //   .then(function (stream0) {
+// //     curSTREAM = stream0
+// //     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+// //     video.play()
+// //     // curSTREAM.getVideoTracks().forEach( (camera) => {
+// //     //   camera.stop();
+// //     // });
+// //   })
+// // .catch(function(err) {
+// //     console.log("An error occured! " + err)
+// // })
     
-  })
+//   })
 
   // var move=0
   // var flagc = 0
