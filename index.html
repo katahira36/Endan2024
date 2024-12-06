@@ -61,17 +61,6 @@ var constrains = {
   var movie = document.getElementById("movie")
   var canvas = document.getElementById("canvas")
 
-//   var nvUA = navigator.userAgent
-
-// var cutSt,cutEd;
-// //バージョン番号を格納する変数
-// var bwVer;
-// //ブラウザ名+バージョン番号にする変数
-// var bw;
-// //大抵はuserAgentの一番最後にそれぞれのブラウザ名とバージョン番号がある。
-// //なので文字列カット終点デフォルトは末尾にする。
-// cutEd   = nvUA.length;
-
 // var flag=0;
   const ctx = movie.getContext("2d")
   const cty = canvas.getContext("2d")
@@ -172,7 +161,8 @@ video.height = window.innerHeight
 
           for (let i = 0; i < nextPoints.rows; i++) {
             if (status.data[i] === 1) {
-              const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
+              // const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
+              const pt1 = new cv.Point(startPoints.data32F[i * 2], startPoints.data32F[i * 2 + 1]);
               const pt2 = new cv.Point(nextPoints.data32F[i * 2], nextPoints.data32F[i * 2 + 1]);
               cv.line(dst, pt1, pt2, [0, 255, 0, 255], 2);
               cv.circle(dst, pt2, 3, [0, 0, 255, 255], -1);
@@ -192,7 +182,7 @@ video.height = window.innerHeight
         }
 
         // 結果をCanvasに描画
-        cv.imshow(movie, dst);
+        cv.imshow('canvasOutput', dst);
 
         cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
 
