@@ -161,8 +161,8 @@ video.height = window.innerHeight
 
           for (let i = 0; i < nextPoints.rows; i++) {
             if (status.data[i] === 1) {
-              // const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
-              const pt1 = new cv.Point(startPoints.data32F[i * 2], startPoints.data32F[i * 2 + 1]);
+              const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
+              // const pt1 = new cv.Point(startPoints.data32F[i * 2], startPoints.data32F[i * 2 + 1]);
               const pt2 = new cv.Point(nextPoints.data32F[i * 2], nextPoints.data32F[i * 2 + 1]);
               cv.line(dst, pt1, pt2, [0, 255, 0, 255], 2);
               cv.circle(dst, pt2, 3, [0, 0, 255, 255], -1);
