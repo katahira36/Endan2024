@@ -171,11 +171,11 @@ video.height = window.innerHeight
 
           startGray.delete();
           startPoints.delete();
-          startGray = gray.clone();
+          startGray = equalized.clone();
           startPoints = nextPoints.clone();
 
-          prevGray.delete();
-          prevPoints.delete();
+          // prevGray.delete();
+          // prevPoints.delete();
           nextPoints.delete();
           status.delete();
           err.delete();
