@@ -26,16 +26,16 @@
 
 
 
-<button class="hogehoge" type="button" id="start">start</button>
-<button class="hogehoge" type="button" id="stop">stop</button>
+<!-- <button class="hogehoge" type="button" id="start">start</button> -->
+<!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
 
 
 <script>
 var constrains = { 
-    video: {facingMode:{ exact:  "user"} } 
-    // video: {facingMode:{ exact:  "environment"} } 
+    // video: {facingMode:{ exact:  "user"} } 
+    video: {facingMode:{ exact:  "environment"} } 
 
   }
 
@@ -52,8 +52,8 @@ var constrains = {
   var curSTREAM = null
 
   window.addEventListener('load' , function(){
-    var startbutton = document.getElementById('start')
-  var stopbutton  = document.getElementById('stop')
+    // var startbutton = document.getElementById('start')
+  // var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
   var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
   
