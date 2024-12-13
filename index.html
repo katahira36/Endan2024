@@ -23,6 +23,7 @@
 </div><br>
 <canvas id="movie" ></canvas>
 <canvas id="canvas"></canvas>
+<p id="text"></p>
 
 
 
@@ -60,6 +61,8 @@ var constrains = {
 
   var movie = document.getElementById("movie")
   var canvas = document.getElementById("canvas")
+
+  document.getElementById("text").textContent = video.width + ":" + video.height;
 
 // var flag=0;
   const ctx = movie.getContext("2d")
