@@ -62,7 +62,7 @@ var constrains = {
   var movie = document.getElementById("movie")
   var canvas = document.getElementById("canvas")
 
-  document.getElementById("text").textContent = video.width + ":" + video.height;
+  var text = document.getElementById("text")
 
 // var flag=0;
   const ctx = movie.getContext("2d")
@@ -117,6 +117,8 @@ video.height = window.innerHeight
     canvas.height = movie.height
     movie.width = 400;
     movie.height = movie.width *video.height /video.width
+
+    text.textContent = video.width + ":" + video.height;
 
 
     function drawCameraToCanvas() {
