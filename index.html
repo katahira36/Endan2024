@@ -76,7 +76,7 @@ var constrains = {
 //   flag=1;
 // }
 
-cv.onRuntimeInitialized = onOpenCvReady;
+
 
 video.width  = window.innerWidth
 video.height = window.innerHeight
@@ -95,7 +95,7 @@ video.height = window.innerHeight
 
   // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
-    function onOpenCvReady() {
+    cv.onRuntimeInitialized =  function onOpenCvReady() {
       console.log("OpenCV.jsが準備完了");
     console.log(constrains)
     navigator.mediaDevices.getUserMedia(constrains)
