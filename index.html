@@ -35,18 +35,13 @@
 
 <script>
 var constrains = { 
-    video: {facingMode:{ exact:  "user",
-    // video: {facingMode:{ exact:  "environment",
-                          
-    } } 
-
+    // video: {facingMode:{   "user"
+    video: {facingMode:   "environment"
+    }
   }
 
 
-  let prevGray = null;
-  let prevPoints = null;
-  let startGray = null;
-  let startPoints = null;
+  
 // 映像・音声を取得するかの設定
 
   var downloaddata = []
@@ -97,6 +92,12 @@ video.height = window.innerHeight
     // まずはユーザーのカメラ・マイクへのアクセスを実施
     cv.onRuntimeInitialized =  function() {
       console.log("OpenCV.jsが準備完了");
+
+      let prevGray = null;
+  let prevPoints = null;
+  let startGray = null;
+  let startPoints = null;
+
     console.log(constrains)
     navigator.mediaDevices.getUserMedia(constrains)
   .then(function (stream) {
@@ -128,9 +129,10 @@ video.height = window.innerHeight
 
     function drawCameraToCanvas() {
           // 現在のフレームを<canvas>に描画
+          let src = cv.imread(movie);
           ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
 
-          let src = cv.imread(movie);
+
           // let cav = cv.imread(movie);
           let gray = new cv.Mat();
         const dst = src.clone();
@@ -192,7 +194,7 @@ video.height = window.innerHeight
         }
 
         // 結果をCanvasに描画
-        cv.imshow(movie, dst);
+        cv.imshow("movie", dst);
 
         cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
 
