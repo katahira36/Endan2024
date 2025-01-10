@@ -12,7 +12,7 @@
   height: 100%;
 } */
   </style>
-  <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" defer></script>
+  
 </head>
 <body>
   
@@ -31,7 +31,7 @@
 <!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
-
+<script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" defer></script>
 
 <script>
 var constrains = { 
@@ -95,7 +95,7 @@ video.height = window.innerHeight
 
   // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
-    cv.onRuntimeInitialized =  function onOpenCvReady() {
+    cv.onRuntimeInitialized =  function() {
       console.log("OpenCV.jsが準備完了");
     console.log(constrains)
     navigator.mediaDevices.getUserMedia(constrains)
