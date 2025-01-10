@@ -72,7 +72,7 @@ var constrains = {
   const cty = canvas.getContext("2d")
 //   if (!(( nvUA.indexOf("Safari") != -1 ) && !(( nvUA.indexOf("Chrome") != -1 ))))
 // {
-  var Mediastream = movie.captureStream()   //iphon not
+  // var Mediastream = movie.captureStream()  //iphon not
 // }else{
 //   flag=1;
 // }
@@ -116,8 +116,8 @@ video.height = window.innerHeight
 
     console.log(video.height)
     // movie.width = movie.height *video.width /video.height
-    movie.height = 1790
-    movie.width =  1342
+    movie.height = movie.width * video.height / video.width
+    
     canvas.width = movie.width
     canvas.height = movie.height
     movie.width = 400;
