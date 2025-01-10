@@ -12,7 +12,7 @@
   height: 100%;
 } */
   </style>
-  <script async src="https://docs.opencv.org/4.x/opencv.js" onload = "onOpenCvReady();" type="text/javascript" defer></script>
+  <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" defer></script>
 </head>
 <body>
   
@@ -54,7 +54,7 @@ var constrains = {
 
   var curSTREAM = null
 
-  // window.addEventListener('load' , function(){
+  window.addEventListener('load' , function(){
     // var startbutton = document.getElementById('start')
   // var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
@@ -76,7 +76,7 @@ var constrains = {
 //   flag=1;
 // }
 
-
+cv.onRuntimeInitialized = onOpenCvReady;
 
 video.width  = window.innerWidth
 video.height = window.innerHeight
@@ -241,7 +241,7 @@ video.height = window.innerHeight
       console.log("An error occured! " + err)
   })
 }
-// cv.onRuntimeInitialized = onOpenCvReady;
+
 
 //   startbutton.addEventListener('click', function(ev){
     
@@ -308,7 +308,7 @@ video.height = window.innerHeight
   //   // move++
   // },0)
 
-  // })
+  })
 
 </script>
 </body>
