@@ -40,8 +40,7 @@ var constrains = {
   }
 
 
-  let prevGray = null;
-  let prevPoints = null;
+  
 // 映像・音声を取得するかの設定
 
   var downloaddata = []
@@ -146,7 +145,7 @@ video.height = window.innerHeight
         let descriptors = new cv.Mat();
 
         // 特徴点を検出
-        orb.detectAndCompute(equalized, new cv.Mat(), keypoints, descriptors);
+        orb.detectAndCompute(gray, new cv.Mat(), keypoints, descriptors);
 
         for (let i = 0; i < keypoints.size(); i++) {
         const point = keypoints.get(i).pt;
@@ -155,13 +154,6 @@ video.height = window.innerHeight
 
         // 特徴点を画像に描画
         cv.drawKeypoints(src, keypoints, dst);
-
-        // if (prevGray === null) {
-        // prevGray = gray.clone();
-        // prevPoints = new cv.Mat();
-        // cv.goodFeaturesToTrack(prevGray, prevPoints, 100, 0.3, 7);
-        // return;
-        // } 
 
         // 結果をCanvasに描画
         cv.imshow(movie, dst);
