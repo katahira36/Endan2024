@@ -32,7 +32,7 @@
 <!-- <botton type="button" id="download">dl</botton> -->
 
 <!-- <script defer src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script> -->
-<script defer src="js/opencv.js" type="text/javascript" ></script>
+<script defer src="js/opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
 
 <script>
 var constrains = { 
@@ -50,8 +50,8 @@ var constrains = {
 
   var curSTREAM = null
 
-  // function OpenCvReady(){
-  //   console.log("OpenCVが読み込み完了")
+  function OpenCvReady(){
+    console.log("OpenCVが読み込み完了")
   // window.addEventListener('load' , function(){
     // var startbutton = document.getElementById('start')
   // var stopbutton  = document.getElementById('stop')
@@ -93,7 +93,7 @@ video.height = window.innerHeight
 
   // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
-    cv.onRuntimeInitialized =  function() {
+    // cv.onRuntimeInitialized =  function() {
       console.log("OpenCV.jsが準備完了");
 
       let prevGray = null;
@@ -245,7 +245,7 @@ video.height = window.innerHeight
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-}
+// }
 
 
 //   startbutton.addEventListener('click', function(ev){
@@ -313,7 +313,7 @@ video.height = window.innerHeight
   //   // move++
   // },0)
 
-  // }
+  }
 
 </script>
 </body>
