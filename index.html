@@ -93,7 +93,7 @@ video.height = window.innerHeight
 
   // constrains.video.facingMode ={ exact: "environment" };
     // まずはユーザーのカメラ・マイクへのアクセスを実施
-    // cv.onRuntimeInitialized =  function() {
+    cv.onRuntimeInitialized =  function() {
       console.log("OpenCV.jsが準備完了");
 
       let prevGray = null;
@@ -245,7 +245,7 @@ video.height = window.innerHeight
   .catch(function(err) {
       console.log("An error occured! " + err)
   })
-// }
+}
 
 
 //   startbutton.addEventListener('click', function(ev){
