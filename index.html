@@ -15,8 +15,9 @@
   
 </head>
 <body>
-  <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script>
+  <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="onOpenCvReady();"></script>
   <script>
+    function onOpenCvReady(){
     if (cv) {
       console.log("OpenCV.js が読み込まれました！");
     } else {
@@ -26,6 +27,7 @@
     cv.onRuntimeInitialized = function() {
       console.log("OpenCV.js の初期化が完了しました！");
     };
+    }
   </script>
 </body>
 </html>
