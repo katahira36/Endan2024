@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webカメラ グレースケール表示</title>
-    <script src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script>
+    <script src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="processVideo()"></script>
     <style>
         canvas, video {
             display: block;
@@ -33,7 +33,7 @@
                 });
         }
 
-        function processVideo() {
+        window.addEventListener('load', () => {
             const cap = new cv.VideoCapture(video);
             const frame = new cv.Mat(video.height, video.width, cv.CV_8UC4);
             const gray = new cv.Mat(video.height, video.width, cv.CV_8UC1);
@@ -53,14 +53,14 @@
             }
 
             updateFrame();
-        }
-        window.addEventListener('load' , function(){
+        })
+        
         video.addEventListener('loadedmetadata', () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            processVideo();
+            
         });
-        })
+        
 
         startWebcam();
     </script>
