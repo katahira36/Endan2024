@@ -23,23 +23,19 @@
 </div><br>
 <canvas id="movie" ></canvas>
 <canvas id="canvas"></canvas>
-<p id="text"></p>
 
 
 
-<!-- <button class="hogehoge" type="button" id="start">start</button> -->
-<!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
+<button class="hogehoge" type="button" id="start">start</button>
+<button class="hogehoge" type="button" id="stop">stop</button>
 <!-- <botton type="button" id="download">dl</botton> -->
 
 
 
 <script>
 var constrains = { 
-    // video: {facingMode:{ exact:  "user"} } 
-    video: {facingMode:{ exact:  "environment",
-                          width: { ideal: 2700 }, // 希望する幅（ピクセル）
-                          height: { ideal: 4800 }
-    } } 
+    video: {facingMode:{ exact:  "user"} } 
+    // video: {facingMode:{ exact:  "environment"} } 
 
   }
 
@@ -56,8 +52,8 @@ var constrains = {
   var curSTREAM = null
 
   window.addEventListener('load' , function(){
-    // var startbutton = document.getElementById('start')
-  // var stopbutton  = document.getElementById('stop')
+    var startbutton = document.getElementById('start')
+  var stopbutton  = document.getElementById('stop')
   // var downloadbutton = document.getElementById('download')
   var video = document.getElementById('video')// 適当にvideoタグのオブジェクトを取得
   
@@ -65,7 +61,16 @@ var constrains = {
   var movie = document.getElementById("movie")
   var canvas = document.getElementById("canvas")
 
-  var text = document.getElementById("text")
+//   var nvUA = navigator.userAgent
+
+// var cutSt,cutEd;
+// //バージョン番号を格納する変数
+// var bwVer;
+// //ブラウザ名+バージョン番号にする変数
+// var bw;
+// //大抵はuserAgentの一番最後にそれぞれのブラウザ名とバージョン番号がある。
+// //なので文字列カット終点デフォルトは末尾にする。
+// cutEd   = nvUA.length;
 
 // var flag=0;
   const ctx = movie.getContext("2d")
@@ -115,15 +120,11 @@ video.height = window.innerHeight
     // video.height = 300;
 
     console.log(video.height)
-    // movie.width = movie.height *video.width /video.height
-    movie.height = 1790
-    movie.width =  1342
+    movie.height = movie.width *video.height /video.width
     canvas.width = movie.width
     canvas.height = movie.height
     movie.width = 400;
     movie.height = movie.width *video.height /video.width
-
-    text.textContent = canvas.width + ":" + canvas.height;
 
 
     function drawCameraToCanvas() {
@@ -172,7 +173,6 @@ video.height = window.innerHeight
           for (let i = 0; i < nextPoints.rows; i++) {
             if (status.data[i] === 1) {
               const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
-              // const pt1 = new cv.Point(startPoints.data32F[i * 2], startPoints.data32F[i * 2 + 1]);
               const pt2 = new cv.Point(nextPoints.data32F[i * 2], nextPoints.data32F[i * 2 + 1]);
               cv.line(dst, pt1, pt2, [0, 255, 0, 255], 2);
               cv.circle(dst, pt2, 3, [0, 0, 255, 255], -1);
@@ -181,11 +181,11 @@ video.height = window.innerHeight
 
           startGray.delete();
           startPoints.delete();
-          startGray = equalized.clone();
+          startGray = gray.clone();
           startPoints = nextPoints.clone();
 
-          // prevGray.delete();
-          // prevPoints.delete();
+          prevGray.delete();
+          prevPoints.delete();
           nextPoints.delete();
           status.delete();
           err.delete();
@@ -218,22 +218,22 @@ video.height = window.innerHeight
     // var videodata =vdata.getSettings().facingMode
     // console.log(videodata)
     
-  //   const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
-  //   // console.log(mine)
+    const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm"
+    // console.log(mine)
     
-  //   recorder = new MediaRecorder(/*(flag)?stream:*/Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
-  //   recorder.ondataavailable = function (e) {
-  //     // var testvideo = document.getElementById('test')
-  //     // testvideo.setAttribute('controls', '')
-  //     // testvideo.setAttribute('width', 500)
-  //     // testvideo.setAttribute('height', 400)
-  //     // var outputdata = window.URL.createObjectURL(e.data) // videoタグが扱えるように、記録データを加工
-  //     // testvideo.src = outputdata // テスト用のビデオのソースに記録データを設置
-  //     if(e.data){
-  //     downloaddata.push(e.data)
+    recorder = new MediaRecorder(/*(flag)?stream:*/Mediastream, { mimeType: mime }) // 映像の入力ソースをユーザーのデバイスから取得
+    recorder.ondataavailable = function (e) {
+      // var testvideo = document.getElementById('test')
+      // testvideo.setAttribute('controls', '')
+      // testvideo.setAttribute('width', 500)
+      // testvideo.setAttribute('height', 400)
+      // var outputdata = window.URL.createObjectURL(e.data) // videoタグが扱えるように、記録データを加工
+      // testvideo.src = outputdata // テスト用のビデオのソースに記録データを設置
+      if(e.data){
+      downloaddata.push(e.data)
       console.log("dl")
-  //     }
-  //   }
+      }
+    }
     
   })
 
@@ -243,48 +243,48 @@ video.height = window.innerHeight
 }
 cv.onRuntimeInitialized = onOpenCvReady;
 
-//   startbutton.addEventListener('click', function(ev){
+  startbutton.addEventListener('click', function(ev){
     
-//     recorder.start(10000)
-//     ev.preventDefault()
-//   }, false);
+    recorder.start(10000)
+    ev.preventDefault()
+  }, false);
 
-//   stopbutton.addEventListener('click', function(ev) {
-//     recorder.stop()
+  stopbutton.addEventListener('click', function(ev) {
+    recorder.stop()
     
-//     setTimeout(() => {
-//       console.log(downloaddata)
-//       var blob = new Blob(downloaddata, { type:  "video/webm"})// 録画ファイルをblob形式に出力
-//       var url = window.URL.createObjectURL(blob) // データにアクセスするためのURLを作成
-//       downloaddata = []
-//       var a = document.createElement('a') // download属性を持ったaタグをクリックするとダウンロードができるので、それをシミュレートする
-//       document.body.appendChild(a)
-//       a.style = 'display:none'
-//       a.href = url;
-//       a.download =  'test' + str + '.webm'
-//       str++
-//       a.click()
-//       window.URL.revokeObjectURL(url)
-//     }, 0);
+    setTimeout(() => {
+      console.log(downloaddata)
+      var blob = new Blob(downloaddata, { type:  "video/webm"})// 録画ファイルをblob形式に出力
+      var url = window.URL.createObjectURL(blob) // データにアクセスするためのURLを作成
+      downloaddata = []
+      var a = document.createElement('a') // download属性を持ったaタグをクリックするとダウンロードができるので、それをシミュレートする
+      document.body.appendChild(a)
+      a.style = 'display:none'
+      a.href = url;
+      a.download =  'test' + str + '.webm'
+      str++
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }, 0);
 
-// //     navigator.mediaDevices.getUserMedia({ 
-// //     video: true, 
-// //     audio: true, 
-// //     facingMode:{ exact: "environment" }
-// //   })
-// //   .then(function (stream0) {
-// //     curSTREAM = stream0
-// //     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
-// //     video.play()
-// //     // curSTREAM.getVideoTracks().forEach( (camera) => {
-// //     //   camera.stop();
-// //     // });
-// //   })
-// // .catch(function(err) {
-// //     console.log("An error occured! " + err)
-// // })
-    
+//     navigator.mediaDevices.getUserMedia({ 
+//     video: true, 
+//     audio: true, 
+//     facingMode:{ exact: "environment" }
 //   })
+//   .then(function (stream0) {
+//     curSTREAM = stream0
+//     video.srcObject = stream0 // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+//     video.play()
+//     // curSTREAM.getVideoTracks().forEach( (camera) => {
+//     //   camera.stop();
+//     // });
+//   })
+// .catch(function(err) {
+//     console.log("An error occured! " + err)
+// })
+    
+  })
 
   // var move=0
   // var flagc = 0
