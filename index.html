@@ -24,7 +24,7 @@
 
 <p id="text"></p>
 
-<!-- <button class="hogehoge" type="button" id="start">start</button> -->
+<button class="hogehoge" type="button" id="start">start</button>
 <!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
@@ -32,9 +32,9 @@
 
 <script>
 
-  // var startbutton = document.getElementById('start')
-  // var stopbutton  = document.getElementById('stop')
-  // var downloadbutton = document.getElementById('download')
+  var startbutton = document.getElementById('start');
+  // var stopbutton  = document.getElementById('stop');
+  // var downloadbutton = document.getElementById('download');
 
   var video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
 
@@ -202,6 +202,7 @@
     video.muted = 'true';
     movie.style = 'display:none';
 
+    startbutton.addEventListener('click', vkeybord);
     vkeybord();
   })
 
