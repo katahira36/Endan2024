@@ -87,7 +87,7 @@
 
         // 現在のフレームを<canvas>に描画
         ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-        let src = cv.imread(movie);
+        let src = cv.imread(canvas);
 
         // cty.drawImage(video, 0, 0, video.width, video.height, 0, 0, canvas.width, canvas.height);
         // let cav = cv.imread(movie);
@@ -197,11 +197,11 @@
     canvas.height = window.innerHeight;
     console.log(video.height);
     
-    // video.style = 'display:none';
+    video.style = 'display:none';
     video.muted = 'true';
-    // movie.style = 'display:none';
+    movie.style = 'display:none';
 
-    startbutton.addEventListener('click', startGray);
+    startbutton.addEventListener('click', vkeybord);
     vkeybord();
   })
 
