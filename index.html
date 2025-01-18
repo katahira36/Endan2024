@@ -86,21 +86,27 @@
       movie.height = movie.width *video.height /video.width;
 
       text.textContent = canvas.width + ":" + canvas.height;
+
+      const cap = new cv.VideoCapture(video);
       
       function drawCameraToCanvas() {
 
         // 現在のフレームを<canvas>に描画
         ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-        let src = cv.imread(image);
+        // let src = cv.imread(image);
+        let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+        cap.read(src);
 
         // cty.drawImage(video, 0, 0, video.width, video.height, 0, 0, canvas.width, canvas.height);
         // let cav = cv.imread(movie);
         
-        let gray = new cv.Mat();
+        let gray = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+        // let gray = new cv.Mat();
         // グレースケールに変換（特徴点検出に適した前処理）
         cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
-        let equalized = new cv.Mat();
+        let equalized = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+        // let equalized = new cv.Mat();
         // ヒストグラム均等化（コントラストをハッキリさせる）
         cv.equalizeHist(gray, equalized);
 
