@@ -12,7 +12,7 @@
   height: 100%;
 } */
   </style> -->
-  <script async src="js/opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
+  <script async src="public/ver4_10_0/opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
   <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script> -->
 </head>
 <body>
@@ -23,7 +23,7 @@
 <canvas id="movie" ></canvas>
 <canvas id="canvas"></canvas>
 
-<img id="image" src="sakura.png" alt="example">
+<!-- <img id="image" src="sakura.png" alt="example"> -->
 
 <p id="text"></p>
 
@@ -49,7 +49,7 @@
   const movie = document.getElementById("movie");
   const canvas = document.getElementById("canvas");
 
-  const image = document.getElementById('image');
+  // const image = document.getElementById('image');
 
   const ctx = movie.getContext("2d");
   const cty = canvas.getContext("2d");
@@ -91,7 +91,7 @@
 
         // 現在のフレームを<canvas>に描画
         ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-        let src = cv.imread(image);
+        let src = cv.imread(movie);
         // let src = new cv.Mat(movie.height, movie.width, cv.CV_8UC4);
         // const imageData = ctx.getImageData(0, 0, movie.width, movie.height);
         // src.data.set(imageData.data);
