@@ -1,192 +1,220 @@
 <!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-            
+<html>
+<head>
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" charset='utf-8'.> -->
+  <meta charset='utf8'>
+  <!-- <style >.hogehoge {
+    padding: 20px;
+    margin: 20px;
+  }
+  /* .wrapper{
+  width: 100%;
+  height: 100%;
+} */
+  </style> -->
+  <script async src="js/opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
+  <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script> -->
+</head>
+<body>
+  
+  <div class="camera">
+    <video id="video" autoplay playsinline></video>
+</div><br>
+<canvas id="movie" ></canvas>
+<canvas id="canvas"></canvas>
 
-      *,
-      ::before,
-      ::after {
-        box-sizing: border-box;
-      }
+<img id="image" src="sakura.png" alt="example">
 
-      body {
-        margin: 1rem;
-        color: #000;
-        background: #fff;
-      }
+<p id="text"></p>
 
-      h1 {
-        font-size: 1.2rem;
-        margin: 0;
-      }
+<button class="hogehoge" type="button" id="start">start</button>
+<!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
+<!-- <botton type="button" id="download">dl</botton> -->
 
-      p {
-        margin: 0 0 1rem;
-      }
+<script>
 
-      h2 {
-        font-size: 1rem;
-        margin: 0;
-      }
+  const startbutton = document.getElementById('start');
+  // var stopbutton  = document.getElementById('stop');
+  // var downloadbutton = document.getElementById('download');
 
-      .preview {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        margin: 0 0 1rem;
-      }
+  const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
 
-      .preview > div {
-        border-right: 1rem solid #fff;  /* Force Margin */
-      }
+  var constrains = { 
+    // video: {facingMode:{   "user"
+    video: {facingMode:   "environment"
+    }
+  }
+  var curSTREAM = null;
 
-      #video {
-        background: #ffc;
-      }
+  const movie = document.getElementById("movie");
+  const canvas = document.getElementById("canvas");
 
-      #canvas {
-        background: #cff;
-      }
+  const image = document.getElementById('image');
 
-    
-    </style>
-  </head>
-  <body>
-    <p>
-      <button id="start" type="button" disabled>Start</button>
-      <button id="stop" type="button" disabled>Stop</button>
-      <span id = "status">Ready</span>
-    </p>
-    <div class="preview">
-      <div>
-        <video id="video" width="640" height="480"  playsinline muted autoplay></video>
-      </div>
-      <div>
-        <canvas id="canvas" width="640" height="480"></canvas>
-      </div>
-    </div>
-    <script>
-            
+  const ctx = movie.getContext("2d");
+  const cty = canvas.getContext("2d");
 
-      // https://docs.opencv.org/3.4.0/dd/d00/tutorial_js_video_display.html
+  const text = document.getElementById("text");
 
-      // Video Settings
-      const width  = 640;
-      const height = 480;
-      const fps = 30;
+  let startGray = null;
+  let startPoints = null;
+  let prevGray = null;
+  let prevPoints = null;
 
-      // Globals
-      let videoCapture = null;
-      let stream = null;
-      let isStreaming = false;
-      let matSrc = null;
-      let matDst = null;
+  function vkeybord() {
+    console.log("バーチャルキーボード開始");
 
-      // Elements
-      const videoElem  = document.getElementById('video');
-      const canvasElem = document.getElementById('canvas');
-      const startButtonElem = document.getElementById('start');
-      const stopButtonElem  = document.getElementById('stop');
-      const statusElem = document.getElementById('status');
+    console.log(constrains);
+    navigator.mediaDevices.getUserMedia(constrains)
+    .then(function (stream) {
+      curSTREAM = stream;
+      video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+      video.play();
 
-      // ================================================================================
+      const videoTrack = stream.getVideoTracks()[0];
+      // ビデオトラックの設定を取得
+      const settings = videoTrack.getSettings();
+      // カメラの解像度を取得
+      video.width  = settings.width;
+      video.height = settings.height;
+      console.log(video.height);
 
-      /** On OpenCV.js Loaded */
-      function onCvLoaded() {
-        console.log('on OpenCV.js Loaded', cv);
+      // movie.width = movie.height *video.width /video.height
+      canvas.height = canvas.width * video.height / video.width;
+      
+      movie.width = 400;
+      movie.height = movie.width *video.height /video.width;
+
+      text.textContent = canvas.width + ":" + canvas.height;
+      
+      function drawCameraToCanvas() {
+
+        // 現在のフレームを<canvas>に描画
+        ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
+        let src = cv.imread(image);
+        // let src = new cv.Mat(movie.height, movie.width, cv.CV_8UC4);
+        // const imageData = ctx.getImageData(0, 0, movie.width, movie.height);
+        // src.data.set(imageData.data);
         
-        cv.onRuntimeInitialized = onReady;  // Not Working...
-        statusElem.innerText = 'On OpenCV.js Loaded';
+        // cty.drawImage(video, 0, 0, video.width, video.height, 0, 0, canvas.width, canvas.height);
+        // let cav = cv.imread(movie);
+        
+        // let gray = new cv.Mat(movie.height, movie.width, cv.CV_8UC1);
+        let gray = new cv.Mat();
+        // グレースケールに変換（特徴点検出に適した前処理）
+        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+
+        // let equalized = new cv.Mat(movie.height, movie.width, cv.CV_8UC1);
+        let equalized = new cv.Mat();
+        // ヒストグラム均等化（コントラストをハッキリさせる）
+        cv.equalizeHist(gray, equalized);
+
+        // ORB検出器を作成
+        // let orb = new cv.ORB();
+        // let keypoints = new cv.KeyPointVector();
+        // let descriptors = new cv.Mat();
+
+        // // 特徴点を検出
+        // orb.detectAndCompute(equalized, new cv.Mat(), keypoints, descriptors);
+
+        // for (let i = 0; i < keypoints.size(); i++) {
+        // const point = keypoints.get(i).pt;
+        // console.log(`特徴点 ${i}: x=${point.x}, y=${point.y}`);
+        // }
+
+        // // 特徴点を画像に描画
+        // cv.drawKeypoints(src, keypoints, dst);
+
+        if (startGray === null) {
+          startGray = equalized.clone();
+          startPoints = new cv.Mat();
+          cv.goodFeaturesToTrack(startGray, startPoints, 100, 0.3, 7);
+
+          prevGray = startGray.clone();
+          prevPoints = startPoints.clone();
+        } else{
+          const nextPoints = new cv.Mat();
+          const status = new cv.Mat();
+          const err = new cv.Mat();
+          cv.calcOpticalFlowPyrLK(prevGray, equalized, prevPoints, nextPoints, status, err);
+
+          for (let i = 0; i < nextPoints.rows; i++) {
+            if (status.data[i] === 1) {
+              const pt1 = new cv.Point(startPoints.data32F[i * 2], startPoints.data32F[i * 2 + 1]);
+              // const pt1 = new cv.Point(prevPoints.data32F[i * 2], prevPoints.data32F[i * 2 + 1]);
+              const pt2 = new cv.Point(nextPoints.data32F[i * 2], nextPoints.data32F[i * 2 + 1]);
+              
+              cv.line(src, pt1, pt2, [0, 255, 0, 255], 2);
+              cv.circle(src, pt2, 3, [0, 0, 255, 255], -1);
+
+              console.log(pt1);
+              console.log(pt2);
+            }
+          }
+
+          prevGray.delete();
+          prevPoints.delete();
+          prevGray = equalized.clone();
+          prevPoints = nextPoints.clone();
+
+          // startGray.delete();
+          // startPoints.delete();
+          nextPoints.delete();
+          status.delete();
+          err.delete();
+        }
+
+        // 結果をCanvasに描画
+        cv.imshow("movie", src);
+        cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
+
+        // メモリの解放
+        src.delete();
+        gray.delete();
+        equalized.delete();
+        // keypoints.delete();
+        // descriptors.delete();
+        // orb.delete();
+
+        // 再度次のフレームを描画するためにrequestAnimationFrameを使う
+        requestAnimationFrame(drawCameraToCanvas);
       }
 
-      /** On Ready */
-      function onReady() {
-        console.log('On Ready');
-        
-        // Set Element Size
-        videoElem.width  = canvasElem.width  = width;
-        videoElem.height = canvasElem.height = height;
-        // Start Video Capture
-        videoCapture = new cv.VideoCapture(videoElem);
-        // Set Button Events
-        startButtonElem.addEventListener('click', onStart);
-        startButtonElem.disabled = false;
-        stopButtonElem.addEventListener('click', onStop);
-        stopButtonElem.disabled  = true;
-        
-        statusElem.innerText = 'Ready';
+      // 映像の準備ができたら描画開始
+      video.onplaying = () => {
+        drawCameraToCanvas();
       };
 
-      /** On Window Loaded */
-      window.addEventListener('load', () => {
-        console.log('Window Loaded');
-        
-        onReady();  // cv.onRuntimeInitialized Is Not Working, So This Is Fallback
-      });
+      console.log("dl");
+    })
+    .catch(function(err) {
+        console.log("An error occured! " + err);
+    })
+  }
 
-      /** On Start */
-      function onStart() {
-        navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false
-        })
-          .then((_stream) => {
-            console.log('On Start : Success');
-            
-            stream = videoElem.srcObject = _stream;
-            videoElem.play();
-            
-            matSrc = new cv.Mat(height, width, cv.CV_8UC4);  // For Video Capture
-            matDst = new cv.Mat(height, width, cv.CV_8UC1);  // For Canvas Preview
-            
-            // Start Process Video
-            setTimeout(processVideo, 0);
-            
-            isStreaming = true;
-            startButtonElem.disabled = true;
-            stopButtonElem.disabled  = false;
-          })
-          .catch((error) => {
-            console.error('On Start : Error', error);
-          });
-      }
+  function OpenCvReady(){
+    console.log("OpenCVが読み込み完了");
 
-      /** On Stop */
-      function onStop() {
-        console.log('On Stop');
-        
-        videoElem.pause();
-        videoElem.srcObject = null;
-        stream.getVideoTracks()[0].stop();
-        
-        isStreaming = false;
-        startButtonElem.disabled = false;
-        stopButtonElem.disabled  = true;
-      }
+    // cv.onRuntimeInitialized = vkeybord;
+  }
 
-      /** Process Video */
-      function processVideo() {
-        if(!isStreaming) {
-          console.log('Process Video : Streaming Stopped');
-          
-          matSrc.delete();
-          matDst.delete();
-          return;
-        }
-        
-        const begin = Date.now();
-        videoCapture.read(matSrc);  // Capture Video Image To Mat Src
-        cv.cvtColor(matSrc, matDst, cv.COLOR_RGBA2GRAY);  // Convert Colour To Grey
-        cv.imshow('canvas', matDst);  // Set Element ID
-        
-        // Loop
-        const delay = 1000 / fps - (Date.now() - begin);
-        setTimeout(processVideo, delay);
-      }
+  window.addEventListener('load' , function(){
+    console.log("初期読み込み完了");
+    console.log(cv);
+    console.log(typeof (cv.imread));
 
-    </script>
-    <script src="https://docs.opencv.org/4.x/opencv.js" onload="onCvLoaded();"></script>
-  </body>
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    console.log(video.height);
+    
+    video.style = 'display:none';
+    video.muted = 'true';
+    movie.style = 'display:none';
+
+    startbutton.addEventListener('click', vkeybord);
+    vkeybord();
+  })
+
+</script>
+</body>
 </html>
