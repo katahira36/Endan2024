@@ -37,11 +37,15 @@
   video.muted = 'true';
   movie.style = 'display:none';
   function OpenCvReady(){
+    console.log("a");
     let img = new cv.imread(image);
+    console.log("b");
     let points = [[10, 10], [20, 10], [20, 20], [10, 20]];
     let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
 
+    console.log("c");
     cv.polylines(img, [ptsMat], true, new cv.Scalar(255, 0, 0), 2, cv.LINE_AA);
+    console.log("d");
     cv.imshow("canvas", img);
 
     ptsMat.delete();
