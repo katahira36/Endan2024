@@ -38,7 +38,7 @@
   movie.style = 'display:none';
   function OpenCvReady(){
     console.log("a");
-    let img = new cv.imread(canvas);
+    let img = cv.imread(canvas);
     console.log("b");
     let points = [[10, 10], [20, 10], [20, 20], [10, 20]];
     let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
