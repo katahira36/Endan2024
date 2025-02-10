@@ -12,7 +12,7 @@
   height: 100%;
 } */
   </style> -->
-  <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
+  <script async src="opencv.js" type="text/javascript" onload="OpenCvReady();"></script>
   <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script> -->
 </head>
 <body>
@@ -35,16 +35,17 @@
   video.style = 'display:none';
   video.muted = 'true';
   movie.style = 'display:none';
-  
-  let img = new cv.Mat.zeros(400, 400, cv.CV_8UC3);
-  let points = [[50, 50], [200, 80], [180, 300], [60, 350]];
-  let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
+  function OpenCvReady(){
+    let img = new cv.Mat.zeros(400, 400, cv.CV_8UC3);
+    let points = [[50, 50], [200, 80], [180, 300], [60, 350]];
+    let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
 
-  cv.polylines(img, [ptsMat], true, new cv.Scalar(255, 0, 0), 2, cv.LINE_AA);
-  cv.imshow("canvas", img);
+    cv.polylines(img, [ptsMat], true, new cv.Scalar(255, 0, 0), 2, cv.LINE_AA);
+    cv.imshow("canvas", img);
 
-  ptsMat.delete();
-  img.delete();
+    ptsMat.delete();
+    img.delete();
+  }
 </script>
 </body>
 </html>
