@@ -23,7 +23,7 @@
 <canvas id="movie" ></canvas>
 <canvas id="canvas"></canvas>
 
-<!-- <img id="image" src="sakura.png" alt="example"> -->
+<img id="image" src="sakura.png" alt="example">
 
 <p id="text"></p>
 
@@ -32,12 +32,13 @@
 <!-- <botton type="button" id="download">dl</botton> -->
 
 <script>
+  const image = document.getElementById('image');
   video.style = 'display:none';
   video.muted = 'true';
   movie.style = 'display:none';
   function OpenCvReady(){
-    let img = new cv.Mat.zeros(400, 400, cv.CV_8UC3);
-    let points = [[50, 50], [200, 80], [180, 300], [60, 350]];
+    let img = new cv.imread(image);
+    let points = [[10, 10], [20, 10], [20, 20], [10, 20]];
     let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
 
     cv.polylines(img, [ptsMat], true, new cv.Scalar(255, 0, 0), 2, cv.LINE_AA);
