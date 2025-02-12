@@ -53,12 +53,10 @@
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
     let src = cv.imread(movie);
 
-    let equalized = new cv.Mat();
-    // ヒストグラム均等化（コントラストをハッキリさせる）
-    cv.equalizeHist(src, equalized);
-
     let hsv = new cv.Mat();
-    cv.cvtColor(equalized, hsv, cv.COLOR_BGR2HSV);
+    cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
+
+    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 64, 0, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [6, 255, 255, 0]); // 上限
@@ -82,7 +80,6 @@
 
     // メモリ解放
     src.delete();
-    equalized.delete();
     hsv.delete();
     red1lower.delete();
     red1upper.delete();
