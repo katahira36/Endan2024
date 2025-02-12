@@ -27,40 +27,130 @@
 
 <p id="text"></p>
 
-<button class="hogehoge" type="button" id="start">start</button>
+<!-- <button class="hogehoge" type="button" id="start">start</button> -->
 <!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
 <script>
-  const canvas = document.getElementById('canvas')
-  const ctx = canvas.getContext("2d");
-  ctx.strokeStyle = '#333'; // 塗りつぶしは暗めの色
-    ctx.fillStyle = '#f00'; // 線は赤色
-    ctx.lineWidth = 5; // 線の幅は5px
+  const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
 
-    /* 円の描画 */
-    ctx.beginPath(); // パスの初期化
-    ctx.arc(100, 50, 30, 0, 2 * Math.PI); // (100, 50)の位置に半径30pxの円
-    ctx.closePath(); // パスを閉じる
-    ctx.fill(); // 軌跡の範囲を塗りつぶす
-  video.style = 'display:none';
-  video.muted = 'true';
-  movie.style = 'display:none';
-  function OpenCvReady(){
-    console.log("a");
-    let img = cv.imread(canvas);
-    console.log("b");
-    let points = [[10, 10], [20, 10], [20, 20], [10, 20]];
-    let ptsMat = cv.matFromArray(1, points.length, cv.CV_32SC2, points.flat());
-
-    console.log("c");
-    cv.polylines(img, [ptsMat], true, new cv.Scalar(255, 0, 0), 2, cv.LINE_AA);
-    console.log("d");
-    cv.imshow("canvas", img);
-
-    ptsMat.delete();
-    img.delete();
+  var constrains = { 
+    // video: {facingMode:{   "user"
+    video: {facingMode:   "environment"
+    }
   }
+  var curSTREAM = null;
+
+  const movie = document.getElementById("movie");
+  const canvas = document.getElementById("canvas");
+
+  const ctx = movie.getContext("2d");
+  const cty = canvas.getContext("2d");
+
+  const text = document.getElementById("text");
+
+  function drawCameraToCanvas() {
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
+    let src = cv.imread(movie);
+
+    let equalized = new cv.Mat();
+    // ヒストグラム均等化（コントラストをハッキリさせる）
+    cv.equalizeHist(src, equalized);
+
+    let hsv = new cv.Mat();
+    cv.cvtColor(equalized, hsv, cv.COLOR_BGR2HSV);
+
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 64, 0, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [6, 255, 255, 0]); // 上限
+    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150, 64, 0, 0]);  // 下限
+    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
+
+    let red1mask = new cv.Mat();
+    cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
+    let red2mask = new cv.Mat();
+    cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    let mask = new cv.Mat();
+    cv.bitwise_or(red1mask, red2mask, mask);
+
+    // マスクを適用して抽出
+    let result = new cv.Mat();
+    cv.bitwise_and(src, src, result, mask);
+
+    // 表示
+    cv.imshow('canvasOutput', result);
+    cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
+
+    // メモリ解放
+    src.delete();
+    equalized.delete();
+    hsv.delete();
+    red1lower.delete();
+    red1upper.delete();
+    red1mask.delete();
+    red2lower.delete();
+    red2upper.delete();
+    red2mask.delete();
+    mask.delete();
+    result.delete();
+
+    // 再度次のフレームを描画するためにrequestAnimationFrameを使う
+    requestAnimationFrame(drawCameraToCanvas);
+  }
+
+  function vkeybord() {
+    console.log("バーチャルキーボード開始");
+
+    console.log(constrains);
+    navigator.mediaDevices.getUserMedia(constrains)
+    .then(function (stream) {
+      curSTREAM = stream;
+      video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+      video.play();
+
+      const videoTrack = stream.getVideoTracks()[0];
+      // ビデオトラックの設定を取得
+      const settings = videoTrack.getSettings();
+      // カメラの解像度を取得
+      video.width  = settings.width;
+      video.height = settings.height;
+      console.log(video.height);
+
+      // movie.width = movie.height *video.width /video.height
+      canvas.height = canvas.width * video.height / video.width;
+      
+      movie.width = 400;
+      movie.height = movie.width *video.height /video.width;
+
+      // text.textContent = canvas.width + ":" + canvas.height;
+
+      // 映像の準備ができたら描画開始
+      video.onplaying = () => {
+        drawCameraToCanvas();
+      };
+
+      console.log("dl");
+    })
+    .catch(function(err) {
+        console.log("An error occured! " + err);
+    })
+  }
+
+  window.addEventListener('load' , function(){
+    console.log("初期読み込み完了");
+    console.log(cv);
+    console.log(typeof (cv.imread));
+
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    console.log(video.height);
+    
+    video.style = 'display:none';
+    video.muted = 'true';
+    movie.style = 'display:none';
+
+    vkeybord();
+  });
+
 </script>
 </body>
 </html>
