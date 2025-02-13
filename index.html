@@ -53,6 +53,17 @@
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
     let src = cv.imread(movie);
 
+    const ycrcb = new cv.Mat();
+    cv.cvtColor(src, ycrcb, cv.COLOR_RGBA2YCrCb);  // RGB → YCrCb 変換
+
+    const channels = new cv.MatVector();
+    cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
+
+    cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
+
+    cv.merge(channels, ycrcb);  // チャンネルを統合
+    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2RGBA);  // YCrCb → RGB に戻す
+
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
 
