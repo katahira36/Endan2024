@@ -42,7 +42,7 @@
   var curSTREAM = null;
 
   const movie = document.getElementById("movie");
-  const canvas = document.getElementById("canvas");
+  // const canvas = document.getElementById("canvas");
 
   const ctx = movie.getContext("2d");
   const cty = canvas.getContext("2d");
@@ -94,7 +94,7 @@
     // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
     // cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
 
-    cv.imshow("canvas", hsv);
+    // cv.imshow("canvas", hsv);
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 0, count *10, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
@@ -159,7 +159,7 @@
       console.log(video.height);
 
       // movie.width = movie.height *video.width /video.height
-      canvas.height = canvas.width * video.height / video.width;
+      // canvas.height = canvas.width * video.height / video.width;
       
       movie.width = 400;
       movie.height = movie.width *video.height /video.width;
@@ -183,8 +183,8 @@
     console.log(cv);
     console.log(typeof (cv.imread));
 
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // canvas.width  = window.innerWidth;
+    // canvas.height = window.innerHeight;
     console.log(video.height);
     
     // video.style = 'display:none';
