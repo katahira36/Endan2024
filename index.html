@@ -27,8 +27,8 @@
 
 <p id="text"></p>
 
-<button class="hogehoge" type="button" id="start">start</button>
-<!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
+<button class="hogehoge" type="button" id="start">bright</button>
+<button class="hogehoge" type="button" id="stop">coler</button>
 <!-- <botton type="button" id="download">dl</botton> -->
 
 <script>
@@ -50,13 +50,20 @@
   const text = document.getElementById("text");
 
   const startbutton = document.getElementById('start');
+  const stopbutton = document.getElementById('stop');
 
   let count = 0;
+  let ct =0;
 
   startbutton.addEventListener('click', function(){
     count = (count +1) % 25;
-    text.textContent = count;
   });
+
+  stopbutton.addEventListener('click', function(){
+    ct = (ct +1) % 25;
+  });
+
+  text.textContent = count + " : " + ct;
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
@@ -96,7 +103,7 @@
 
     // cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 0, count *10, 0]);  // 下限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, st *10, count *10, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
     // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
     // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
