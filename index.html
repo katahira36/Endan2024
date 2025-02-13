@@ -127,8 +127,9 @@
 
     // マスクを適用して抽出
     let result = new cv.Mat();
-    whiteBackground.copyTo(result, red1mask);
     cv.bitwise_and(src, src, result, red1mask);
+
+    cv.bitwise_xor(result, whiteBackground, result, red1mask);
 
     cv.imshow("canvas", result);
 
