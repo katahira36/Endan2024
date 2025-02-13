@@ -27,7 +27,7 @@
 
 <p id="text"></p>
 
-<!-- <button class="hogehoge" type="button" id="start">start</button> -->
+<button class="hogehoge" type="button" id="start">start</button>
 <!-- <button class="hogehoge" type="button" id="stop">stop</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
@@ -49,7 +49,13 @@
 
   const text = document.getElementById("text");
 
+  const startbutton = document.getElementById('start');
+
   let count = 0;
+
+  startbutton.addEventListener('click', function(){
+    count = (count +1) % 25;
+  });
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
@@ -89,9 +95,9 @@
 
     cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 100, 0, 0]);  // 下限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, count * 10, 0, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [6, 255, 255, 0]); // 上限
-    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150, 100, 0, 0]);  // 下限
+    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150, count * 10, 0, 0]);  // 下限
     let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
