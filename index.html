@@ -55,6 +55,7 @@
 
   startbutton.addEventListener('click', function(){
     count = (count +1) % 25;
+    text.textContent = count;
   });
 
   function drawCameraToCanvas() {
