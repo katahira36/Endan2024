@@ -57,10 +57,12 @@
 
   startbutton.addEventListener('click', function(){
     count = (count +1) % 25;
+    text.textContent = count + " : " + ct;
   });
 
   stopbutton.addEventListener('click', function(){
     ct = (ct +1) % 25;
+    text.textContent = count + " : " + ct;
   });
 
   text.textContent = count + " : " + ct;
