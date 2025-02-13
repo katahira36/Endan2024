@@ -62,10 +62,10 @@
     cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
 
     cv.merge(channels, ycrcb);  // チャンネルを統合
-    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BGR);  // YCrCb → RGB に戻す
+    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2RGB);  // YCrCb → RGB に戻す
 
     let hsv = new cv.Mat();
-    cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
+    cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
     // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
     cv.medianBlur(hsv, hsv, 5);
