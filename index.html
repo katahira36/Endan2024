@@ -56,7 +56,8 @@
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
 
-    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+    cv.medianBlur(hsv, hsv, 5);
 
     cv.imshow("canvas", hsv);
 
