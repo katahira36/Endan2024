@@ -49,6 +49,8 @@
 
   const text = document.getElementById("text");
 
+  let count = 0;
+
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
     let src = cv.imread(movie);
@@ -64,49 +66,49 @@
     // cv.merge(channels, ycrcb);  // チャンネルを統合
     // cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2RGB);  // YCrCb → RGB に戻す
 
-    const gray = new cv.Mat();
-    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+    // const gray = new cv.Mat();
+    // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
-    // 平均輝度を計算
-    const mean = cv.mean(gray)[0];
+    // // 平均輝度を計算
+    // const mean = cv.mean(gray)[0];
 
-    // 目標の平均輝度（例: 128 に正規化）
-    const targetBrightness = 128;
-    const scale = targetBrightness / mean;
+    // // 目標の平均輝度（例: 128 に正規化）
+    // const targetBrightness = 128;
+    // const scale = targetBrightness / mean;
 
-    // 画像の輝度を調整
-    const dst = new cv.Mat();
-    cv.convertScaleAbs(src, dst, scale, 0);
+    // // 画像の輝度を調整
+    // const dst = new cv.Mat();
+    // cv.convertScaleAbs(src, dst, scale, 0);
 
 
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
-    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
-    // cv.medianBlur(hsv, hsv, 5);
+    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
+    // cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
 
     cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 120, 70, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10, 255, 255, 0]); // 上限
-    // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150, 64, 0, 0]);  // 下限
-    // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 64, 0, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [6, 255, 255, 0]); // 上限
+    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150, 64, 0, 0]);  // 下限
+    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
     cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    // let red2mask = new cv.Mat();
-    // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
-    // let mask = new cv.Mat();
-    // cv.bitwise_or(red1mask, red2mask, mask);
+    let red2mask = new cv.Mat();
+    cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    let mask = new cv.Mat();
+    cv.bitwise_or(red1mask, red2mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
-    const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-    cv.morphologyEx(red1mask, red1mask, cv.MORPH_OPEN, kernel);
-    cv.morphologyEx(red1mask, red1mask, cv.MORPH_CLOSE, kernel);
+    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+    // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
+    // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
     let result = new cv.Mat();
-    cv.bitwise_and(src, src, result, red1mask);
+    cv.bitwise_and(src, src, result, mask);
 
     // 表示
     cv.imshow('movie', result);
@@ -117,11 +119,15 @@
     red1lower.delete();
     red1upper.delete();
     red1mask.delete();
-    // red2lower.delete();
-    // red2upper.delete();
-    // red2mask.delete();
-    // mask.delete();
+    red2lower.delete();
+    red2upper.delete();
+    red2mask.delete();
+    mask.delete();
     result.delete();
+
+    // ycrcb.delete();
+    // channels.delete();
+    // gray.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
