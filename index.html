@@ -53,22 +53,37 @@
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
     let src = cv.imread(movie);
 
-    const ycrcb = new cv.Mat();
-    cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
+    // const ycrcb = new cv.Mat();
+    // cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
 
-    const channels = new cv.MatVector();
-    cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
+    // const channels = new cv.MatVector();
+    // cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
 
-    cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
+    // cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
 
-    cv.merge(channels, ycrcb);  // チャンネルを統合
-    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2RGB);  // YCrCb → RGB に戻す
+    // cv.merge(channels, ycrcb);  // チャンネルを統合
+    // cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2RGB);  // YCrCb → RGB に戻す
+
+    const gray = new cv.Mat();
+    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+
+    // 平均輝度を計算
+    const mean = cv.mean(gray)[0];
+
+    // 目標の平均輝度（例: 128 に正規化）
+    const targetBrightness = 128;
+    const scale = targetBrightness / mean;
+
+    // 画像の輝度を調整
+    const dst = new cv.Mat();
+    cv.convertScaleAbs(src, dst, scale, 0);
+
 
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
-    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
-    cv.medianBlur(hsv, hsv, 5);
+    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+    // cv.medianBlur(hsv, hsv, 5);
 
     cv.imshow("canvas", hsv);
 
@@ -85,9 +100,9 @@
     // cv.bitwise_or(red1mask, red2mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
-    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-    // cv.morphologyEx(red1mask, red1mask, cv.MORPH_OPEN, kernel);
-    // cv.morphologyEx(red1mask, red1mask, cv.MORPH_CLOSE, kernel);
+    const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+    cv.morphologyEx(red1mask, red1mask, cv.MORPH_OPEN, kernel);
+    cv.morphologyEx(red1mask, red1mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
     let result = new cv.Mat();
