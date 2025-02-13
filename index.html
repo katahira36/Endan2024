@@ -102,9 +102,9 @@
     cv.bitwise_or(red1mask, red2mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
-    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-    // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
-    // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
+    const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+    cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
+    cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
     let result = new cv.Mat();
