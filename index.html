@@ -56,7 +56,7 @@
   let ct =0;
 
   startbutton.addEventListener('click', function(){
-    count = (count +1) % 25;
+    count = (count +1) % 200;
     text.textContent = count + " : " + ct;
   });
 
@@ -105,8 +105,8 @@
 
     // cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [count *10, ct *10, 100, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [(count + 1) *10, 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [count , ct *10, 100, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [(count + 1) , 255, 255, 0]); // 上限
     // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
     // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
