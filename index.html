@@ -97,16 +97,16 @@
     cv.imshow("canvas", hsv);
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 100, count *10, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [6, 255, 255, 0]); // 上限
-    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
-    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
+    // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
+    // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
     cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    let red2mask = new cv.Mat();
-    cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
-    let mask = new cv.Mat();
-    cv.bitwise_or(red1mask, red2mask, mask);
+    // let red2mask = new cv.Mat();
+    // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    // let mask = new cv.Mat();
+    // cv.bitwise_or(red1mask, red2mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
     // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
@@ -115,7 +115,7 @@
 
     // マスクを適用して抽出
     let result = new cv.Mat();
-    cv.bitwise_and(src, src, result, mask);
+    cv.bitwise_and(src, src, result, red1mask);
 
     // 表示
     cv.imshow('movie', result);
@@ -126,10 +126,10 @@
     red1lower.delete();
     red1upper.delete();
     red1mask.delete();
-    red2lower.delete();
-    red2upper.delete();
-    red2mask.delete();
-    mask.delete();
+    // red2lower.delete();
+    // red2upper.delete();
+    // red2mask.delete();
+    // mask.delete();
     result.delete();
 
     // ycrcb.delete();
