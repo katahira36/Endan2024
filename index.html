@@ -56,7 +56,7 @@
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
 
-    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 120, 70, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10, 255, 255, 0]); // 上限
@@ -71,9 +71,9 @@
     // cv.bitwise_or(red1mask, red2mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
-    const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-    cv.morphologyEx(red1mask, red1mask, cv.MORPH_OPEN, kernel);
-    cv.morphologyEx(red1mask, red1mask, cv.MORPH_CLOSE, kernel);
+    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+    // cv.morphologyEx(red1mask, red1mask, cv.MORPH_OPEN, kernel);
+    // cv.morphologyEx(red1mask, red1mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
     let result = new cv.Mat();
