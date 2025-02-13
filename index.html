@@ -91,8 +91,8 @@
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
-    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
-    cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
+    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
+    // cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
 
     cv.imshow("canvas", hsv);
 
