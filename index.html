@@ -140,6 +140,8 @@
     // ヒストグラム均等化（コントラストをハッキリさせる）
     cv.equalizeHist(gray, equalized);
 
+    cv.threshold(equalized, equalized, count * 5, 255, cv.THRESH_BINARY);
+
     // 表示
     cv.imshow('movie', equalized);
 
