@@ -120,8 +120,14 @@
     // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
     // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
+    // 背景用の白画像を作成
+    const whiteBackground = new cv.Mat(src.rows, src.cols, src.type(), [255, 255, 255, 255]);
+
+    // `copyTo` を使ってマスクされた部分を白にする
+
     // マスクを適用して抽出
     let result = new cv.Mat();
+    whiteBackground.copyTo(result, red1mask);
     cv.bitwise_and(src, src, result, red1mask);
 
     cv.imshow("canvas", result);
@@ -152,6 +158,7 @@
     // channels.delete();
     gray.delete();
     equalized.delete();
+    whiteBackground.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
