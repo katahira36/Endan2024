@@ -55,9 +55,10 @@
 
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
-    cv.imshow("canvas", hsv);
 
-    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
+
+    cv.imshow("canvas", hsv);
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0, 120, 70, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10, 255, 255, 0]); // 上限
