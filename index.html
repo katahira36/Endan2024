@@ -64,7 +64,7 @@
     cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
 
     cv.merge(channels, ycrcb);  // チャンネルを統合
-    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BRG);  // YCrCb → RGB に戻す
+    cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BGR);  // YCrCb → RGB に戻す
 
     // const gray = new cv.Mat();
     // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
