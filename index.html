@@ -126,8 +126,15 @@
     let result = new cv.Mat();
     cv.bitwise_and(src, src, result, red1mask);
 
+    const gray = new cv.Mat();
+    cv.cvtColor(result, gray, cv.COLOR_RGBA2GRAY);
+
+    let equalized = new cv.Mat();
+    // ヒストグラム均等化（コントラストをハッキリさせる）
+    cv.equalizeHist(gray, equalized);
+
     // 表示
-    cv.imshow('movie', result);
+    cv.imshow('movie', equalized);
 
     // メモリ解放
     src.delete();
@@ -143,7 +150,8 @@
 
     // ycrcb.delete();
     // channels.delete();
-    // gray.delete();
+    gray.delete();
+    equalized.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
