@@ -55,6 +55,7 @@
 
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_BGR2HSV);
+    cv.imshow("canvas", hsv);
 
     // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0);
 
@@ -81,7 +82,6 @@
 
     // 表示
     cv.imshow('movie', result);
-    cty.drawImage(movie, 0, 0, movie.width, movie.height, 0, 0, canvas.width, canvas.height);
 
     // メモリ解放
     src.delete();
