@@ -105,12 +105,25 @@
 
     // cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , ct *10, count *10, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255 , 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 , 80, 120, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 , 255, 255, 0]); // 上限
+
+    let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [105 , 80, 120, 0]);  // 下限
+    let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [115 , 255, 255, 0]); // 上限
+
+    let green1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [65 , 80, 120, 0]);  // 下限
+    let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [80 , 255, 255, 0]); // 上限
+
+    let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [20 , 80, 120, 0]);  // 下限
+    let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [30 , 255, 255, 0]); // 上限
+
+    let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 80, 120, 0]);  // 下限
+    let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [100 , 255, 255, 0]); // 上限
     // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
     // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
+    // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
     cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
     // let red2mask = new cv.Mat();
     // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
