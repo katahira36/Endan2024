@@ -21,7 +21,7 @@
     <video id="video" autoplay playsinline></video>
 </div><br>
 <canvas id="movie" ></canvas>
-<canvas id="canvas"></canvas>
+<!-- <canvas id="canvas"></canvas> -->
 
 <!-- <img id="image" src="sakura.png" alt="example"> -->
 
@@ -42,10 +42,10 @@
   var curSTREAM = null;
 
   const movie = document.getElementById("movie");
-  const canvas = document.getElementById("canvas");
+  // const canvas = document.getElementById("canvas");
 
   const ctx = movie.getContext("2d");
-  const cty = canvas.getContext("2d");
+  // const cty = canvas.getContext("2d");
 
   const text = document.getElementById("text");
 
@@ -103,8 +103,10 @@
     cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
     cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 0, 130, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255 , 30, 255, 0]); // 上限
+    // cv.imshow("canvas", hsv);
+
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , ct *10, count *10, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255 , 255, 255, 0]); // 上限
     // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
     // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
@@ -120,30 +122,12 @@
     // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
     // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
-    // 背景用の白画像を作成
-    const whiteBackground = new cv.Mat(src.rows, src.cols, src.type(), [255, 255, 255, 255]);
-
-    // `copyTo` を使ってマスクされた部分を白にする
-
     // マスクを適用して抽出
     let result = new cv.Mat();
     cv.bitwise_and(src, src, result, red1mask);
 
-    cv.bitwise_xor(result, whiteBackground, result, red1mask);
-
-    cv.imshow("canvas", result);
-
-    const gray = new cv.Mat();
-    cv.cvtColor(result, gray, cv.COLOR_RGBA2GRAY);
-
-    let equalized = new cv.Mat();
-    // ヒストグラム均等化（コントラストをハッキリさせる）
-    cv.equalizeHist(gray, equalized);
-
-    cv.threshold(equalized, equalized, count * 5, 255, cv.THRESH_BINARY);
-
     // 表示
-    cv.imshow('movie', equalized);
+    cv.imshow('movie', result);
 
     // メモリ解放
     src.delete();
@@ -159,9 +143,7 @@
 
     // ycrcb.delete();
     // channels.delete();
-    gray.delete();
-    equalized.delete();
-    whiteBackground.delete();
+    // gray.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
@@ -217,8 +199,7 @@
     // video.style = 'display:none';
     video.muted = 'true';
     // movie.style = 'display:none';
-    canvas.style = 'display:none';
-    
+
     vkeybord();
   });
 
