@@ -161,7 +161,7 @@
         const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
 
         const approx = new cv.Mat();
-        cv.approxPolyDP(contours.get(i), approx, 0.02 * perimeter, true);
+        cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
         
         if (approx.rows === 4) {  // 小さいノイズを除外
           const moments = cv.moments(contours.get(i));
