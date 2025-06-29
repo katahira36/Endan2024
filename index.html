@@ -55,17 +55,17 @@
   let count = 0;
   let ct =0;
 
-  startbutton.addEventListener('click', function(){
-    count = (count +1) % 200;
-    text.textContent = count + " : " + ct;
-  });
+  // startbutton.addEventListener('click', function(){
+  //   count = (count +1) % 200;
+  //   text.textContent = count + " : " + ct;
+  // });
 
-  stopbutton.addEventListener('click', function(){
-    ct = (ct +1) % 25;
-    text.textContent = count + " : " + ct;
-  });
+  // stopbutton.addEventListener('click', function(){
+  //   ct = (ct +1) % 25;
+  //   text.textContent = count + " : " + ct;
+  // });
 
-  text.textContent = count + " : " + ct;
+  // text.textContent = count + " : " + ct;
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
@@ -145,6 +145,7 @@
     const hierarchy = new cv.Mat();
     cv.findContours(red1mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
+    let sumarea = 0;
     // ブロブを描画
     const output = src.clone();
     for (let i = 0; i < contours.size(); i++) {
@@ -153,6 +154,7 @@
       
       // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
+      sumarea = sumarea + area;
 
       if (area > 100){
 
@@ -182,6 +184,7 @@
       }
     }
 
+    text.textContent = sumarea + " : " + (movie.width * movie.height);
     // 表示
     cv.imshow('movie', output);
 
