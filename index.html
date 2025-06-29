@@ -153,9 +153,9 @@
       
       // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      const perimeter = cv.arcLength(contours, true);
-       // 円形度の計算
-      const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+      // const perimeter = cv.arcLength(contours, true);
+      //  // 円形度の計算
+      // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
       
       if (area > 50) {  // 小さいノイズを除外
         const moments = cv.moments(contours.get(i));
