@@ -154,17 +154,18 @@
       // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
 
-      if (area > 100) continue;
+      if (area > 100){
 
-      const perimeter = cv.arcLength(contours.get(i), true);
-       // 円形度の計算
-      const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
-      
-      if (circularity > 0.7) {  // 小さいノイズを除外
-        const moments = cv.moments(contours.get(i));
-        const cx = moments.m10 / moments.m00;
-        const cy = moments.m01 / moments.m00;
-        cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+        const perimeter = cv.arcLength(contours.get(i), true);
+        // 円形度の計算
+        const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+        
+        if (circularity > 0.7) {  // 小さいノイズを除外
+          const moments = cv.moments(contours.get(i));
+          const cx = moments.m10 / moments.m00;
+          const cy = moments.m01 / moments.m00;
+          cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+        }
       }
     }
 
