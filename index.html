@@ -161,7 +161,14 @@
         const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
 
         const approx = new cv.Mat();
-        cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
+        cv.approxPolyDP(contours.get(i), approx, 0.02 * perimeter, true);
+
+        // drawContours には MatVector が必要なのでラップする
+        const approxVec = new cv.MatVector();
+        approxVec.push_back(approx);
+
+        // 緑で描画（単純化された輪郭）
+        cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
         if (approx.rows === 4) {  // 小さいノイズを除外
           const moments = cv.moments(contours.get(i));
@@ -171,6 +178,7 @@
         }
 
         approx.delete();
+        approxVec.delete();
       }
     }
 
