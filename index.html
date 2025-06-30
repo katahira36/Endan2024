@@ -29,7 +29,7 @@
 
 <button class="hogehoge" type="button" id="start">bright</button>
 <button class="hogehoge" type="button" id="stop">coler</button>
-<!-- <botton type="button" id="download">dl</botton> -->
+<botton class="hogehoge" type="button" id="download">ver</botton>
 
 <script>
   const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
@@ -51,12 +51,14 @@
 
   const startbutton = document.getElementById('start');
   const stopbutton = document.getElementById('stop');
+  const testbutton = document.getElementById('download');
 
   let count = 0;
   let ct =0;
+  let col =0;
 
   startbutton.addEventListener('click', function(){
-    count = (count +1) % 200;
+    count = (count +1) % 25;
     text.textContent = count + " : " + ct;
   });
 
@@ -65,7 +67,12 @@
     text.textContent = count + " : " + ct;
   });
 
-  text.textContent = count + " : " + ct;
+  testbutton.addEventListener('click', function(){
+    col = (col +1) % 250;
+    text.textContent = count + " : " + ct;
+  });
+
+  text.textContent = count + " : " + ct + " : " +col;
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
@@ -185,7 +192,7 @@
       }
     }
 
-    text.textContent = count + " : " + ct + " , " + sumarea + " : " + (movie.width * movie.height);
+    text.textContent = count + " : " + ct  + " : " +col + " , " + sumarea + " : " + (movie.width * movie.height);
     // 表示
     cv.imshow('movie', output);
 
