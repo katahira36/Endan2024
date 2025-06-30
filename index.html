@@ -105,50 +105,51 @@
 
     // cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 60 , count *10, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
-    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 ,60, count *10, 0]);  // 下限
-    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
+    // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 60 , count *10, 0]);  // 下限
+    // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
+    // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 ,60, count *10, 0]);  // 下限
+    // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
 
-    let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 60, count *10, 0]);  // 下限
-    let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [117 , 255, 255, 0]); // 上限
+    // let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 60, count *10, 0]);  // 下限
+    // let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [117 , 255, 255, 0]); // 上限
 
     let green1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [60 , 60, count *10, 0]);  // 下限
     let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [78 , 255, 255, 0]); // 上限
 
-    let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10 , 60, count *10, 0]);  // 下限
-    let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [32 , 255, 255, 0]); // 上限
+    // let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10 , 60, count *10, 0]);  // 下限
+    // let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [32 , 255, 255, 0]); // 上限
 
-    let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 60, count *10, 0]);  // 下限
-    let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 255, 255, 0]); // 上限
+    // let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 60, count *10, 0]);  // 下限
+    // let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 255, 255, 0]); // 上限
 
     // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct ,80, count *10, 0]);  // 下限
     // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct  +1, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
+    cv.inRange(hsv, green1lower, green1upper, red1mask); // 色の範囲でマスク作成
+
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    let red2mask = new cv.Mat();
-    cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    // let red2mask = new cv.Mat();
+    // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
 
-    let bluemask = new cv.Mat();
-    cv.inRange(hsv, blue1lower, blue1upper, bluemask);
+    // let bluemask = new cv.Mat();
+    // cv.inRange(hsv, blue1lower, blue1upper, bluemask);
 
-    let greenmask = new cv.Mat();
-    cv.inRange(hsv, green1lower, green1upper, greenmask);
+    // let greenmask = new cv.Mat();
+    // cv.inRange(hsv, green1lower, green1upper, greenmask);
 
-    let yellowmask = new cv.Mat();
-    cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
+    // let yellowmask = new cv.Mat();
+    // cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
 
-    let skymask = new cv.Mat();
-    cv.inRange(hsv, sky1lower, sky1upper, skymask);
+    // let skymask = new cv.Mat();
+    // cv.inRange(hsv, sky1lower, sky1upper, skymask);
 
-    let mask = new cv.Mat();
-    cv.bitwise_or(red1mask, red2mask, mask);
-    cv.bitwise_or(bluemask, mask, mask);
-    cv.bitwise_or(greenmask, mask, mask);
-    cv.bitwise_or(yellowmask, mask, mask);
-    cv.bitwise_or(skymask, mask, mask);
+    // let mask = new cv.Mat();
+    // cv.bitwise_or(red1mask, red2mask, mask);
+    // cv.bitwise_or(bluemask, mask, mask);
+    // cv.bitwise_or(greenmask, mask, mask);
+    // cv.bitwise_or(yellowmask, mask, mask);
+    // cv.bitwise_or(skymask, mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
     // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
@@ -157,7 +158,7 @@
 
     // マスクを適用して抽出
     let result = new cv.Mat();
-    cv.bitwise_and(src, src, result, mask);
+    cv.bitwise_and(src, src, result, red1mask);
 
     // 輪郭検出
     // const contours = new cv.MatVector();
