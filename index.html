@@ -19,260 +19,253 @@
   
   <div class="camera">
     <video id="video" autoplay playsinline></video>
-  </div><br>
-  <canvas id="movie" ></canvas>
-  <!-- <canvas id="canvas"></canvas> -->
+</div><br>
+<canvas id="movie" ></canvas>
+<!-- <canvas id="canvas"></canvas> -->
 
-  <!-- <img id="image" src="sakura.png" alt="example"> -->
+<!-- <img id="image" src="sakura.png" alt="example"> -->
 
-  <p id="text"></p>
+<p id="text"></p>
 
-  <button class="hogehoge" type="button" id="start">bright</button>
-  <button class="hogehoge" type="button" id="stop">coler</button>
-  <botton class="hogehoge" type="button" id="dl">ver</botton>
+<button class="hogehoge" type="button" id="start">bright</button>
+<button class="hogehoge" type="button" id="stop">coler</button>
+<!-- <botton type="button" id="download">dl</botton> -->
 
-  <script>
-    const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
+<script>
+  const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
 
-    var constrains = { 
-      // video: {facingMode:{   "user"
-      video: {facingMode:   "environment"
-      }
+  var constrains = { 
+    // video: {facingMode:{   "user"
+    video: {facingMode:   "environment"
     }
-    var curSTREAM = null;
+  }
+  var curSTREAM = null;
 
-    const movie = document.getElementById("movie");
-    // const canvas = document.getElementById("canvas");
+  const movie = document.getElementById("movie");
+  // const canvas = document.getElementById("canvas");
 
-    const ctx = movie.getContext("2d");
-    // const cty = canvas.getContext("2d");
+  const ctx = movie.getContext("2d");
+  // const cty = canvas.getContext("2d");
 
-    const text = document.getElementById("text");
+  const text = document.getElementById("text");
 
-    const startbutton = document.getElementById('start');
-    const stopbutton = document.getElementById('stop');
-    const testbutton = document.getElementById('dl');
+  const startbutton = document.getElementById('start');
+  const stopbutton = document.getElementById('stop');
 
-    let count = 0;
-    let ct =0;
-    let col =0;
+  let count = 0;
+  let ct =0;
 
-    startbutton.addEventListener('click', function(){
-      count = (count +1) % 25;
-      text.textContent = count + " : " + ct;
-    });
+  startbutton.addEventListener('click', function(){
+    count = (count +1) % 25;
+    text.textContent = count + " : " + ct;
+  });
 
-    stopbutton.addEventListener('click', function(){
-      ct = (ct +1) % 25;
-      text.textContent = count + " : " + ct;
-    });
+  stopbutton.addEventListener('click', function(){
+    ct = (ct +1) % 25;
+    text.textContent = count + " : " + ct;
+  });
 
-    testbutton.addEventListener('click', function(){
-      col = (col +1) % 250;
-      text.textContent = count + " : " + ct;
-    });
+  text.textContent = count + " : " + ct;
 
-    text.textContent = count + " : " + ct + " : " +col;
+  function drawCameraToCanvas() {
+    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
+    let src = cv.imread(movie);
 
-    function drawCameraToCanvas() {
-      ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-      let src = cv.imread(movie);
+    // const ycrcb = new cv.Mat();
+    // cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
 
-      // const ycrcb = new cv.Mat();
-      // cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
+    // const channels = new cv.MatVector();
+    // cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
 
-      // const channels = new cv.MatVector();
-      // cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
+    // cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
 
-      // cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
+    // cv.merge(channels, ycrcb);  // チャンネルを統合
+    // cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BGR);  // YCrCb → RGB に戻す
 
-      // cv.merge(channels, ycrcb);  // チャンネルを統合
-      // cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BGR);  // YCrCb → RGB に戻す
+    // const gray = new cv.Mat();
+    // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
-      // const gray = new cv.Mat();
-      // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+    // // 平均輝度を計算
+    // const mean = cv.mean(gray)[0];
 
-      // // 平均輝度を計算
-      // const mean = cv.mean(gray)[0];
+    // // 目標の平均輝度（例: 128 に正規化）
+    // const targetBrightness = 128;
+    // const scale = targetBrightness / mean;
 
-      // // 目標の平均輝度（例: 128 に正規化）
-      // const targetBrightness = 128;
-      // const scale = targetBrightness / mean;
-
-      // // 画像の輝度を調整
-      // const dst = new cv.Mat();
-      // cv.convertScaleAbs(src, dst, scale, 0);
+    // // 画像の輝度を調整
+    // const dst = new cv.Mat();
+    // cv.convertScaleAbs(src, dst, scale, 0);
 
 
-      let hsv = new cv.Mat();
-      cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
+    let hsv = new cv.Mat();
+    cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
-      cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
-      cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
+    cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
+    cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
 
-      // cv.imshow("canvas", hsv);
+    // cv.imshow("canvas", hsv);
 
-      // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 , 80, 120, 0]);  // 下限
-      // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 , 255, 255, 0]); // 上限
+    // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 , 80, 120, 0]);  // 下限
+    // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 , 255, 255, 0]); // 上限
 
-      // let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [105 , 80, 120, 0]);  // 下限
-      // let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [115 , 255, 255, 0]); // 上限
+    // let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [105 , 80, 120, 0]);  // 下限
+    // let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [115 , 255, 255, 0]); // 上限
 
-      // let green1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [65 , 80, 120, 0]);  // 下限
-      // let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [80 , 255, 255, 0]); // 上限
+    // let green1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [65 , 80, 120, 0]);  // 下限
+    // let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [80 , 255, 255, 0]); // 上限
 
-      // let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [20 , 80, 120, 0]);  // 下限
-      // let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [30 , 255, 255, 0]); // 上限
+    // let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [20 , 80, 120, 0]);  // 下限
+    // let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [30 , 255, 255, 0]); // 上限
 
-      // let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 80, 120, 0]);  // 下限
-      // let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [100 , 255, 255, 0]); // 上限
+    // let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 80, 120, 0]);  // 下限
+    // let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [100 , 255, 255, 0]); // 上限
 
-      let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0,ct *10, count *10, 0]);  // 下限
-      let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0,ct *10, count *10, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
 
-      let red1mask = new cv.Mat();
-      // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-      cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-      // let red2mask = new cv.Mat();
-      // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
-      // let mask = new cv.Mat();
-      // cv.bitwise_or(red1mask, red2mask, mask);
+    let red1mask = new cv.Mat();
+    // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
+    cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
+    // let red2mask = new cv.Mat();
+    // cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    // let mask = new cv.Mat();
+    // cv.bitwise_or(red1mask, red2mask, mask);
 
-      // 4. モルフォロジー変換（ノイズ除去）
-      // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-      // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
-      // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
+    // 4. モルフォロジー変換（ノイズ除去）
+    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+    // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
+    // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
-      // マスクを適用して抽出
-      let result = new cv.Mat();
-      cv.bitwise_and(src, src, result, red1mask);
+    // マスクを適用して抽出
+    let result = new cv.Mat();
+    cv.bitwise_and(src, src, result, red1mask);
 
-      // 輪郭検出
-      const contours = new cv.MatVector();
-      const hierarchy = new cv.Mat();
-      cv.findContours(red1mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    // 輪郭検出
+    const contours = new cv.MatVector();
+    const hierarchy = new cv.Mat();
+    cv.findContours(red1mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-      let sumarea = 0;
-      // ブロブを描画
-      // const output = src.clone();
-      const output = result.clone();
-      for (let i = 0; i < contours.size(); i++) {
-        const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-        cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-        
-        // 面積でフィルタしたり、重心を求める例：
-        const area = cv.contourArea(contours.get(i));
-        sumarea = sumarea + area;
-
-        if (area > 100){
-
-          const perimeter = cv.arcLength(contours.get(i), true);
-          // 円形度の計算
-          const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
-
-          const approx = new cv.Mat();
-          cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
-
-          // drawContours には MatVector が必要なのでラップする
-          const approxVec = new cv.MatVector();
-          approxVec.push_back(approx);
-
-          // 緑で描画（単純化された輪郭）
-          cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
-          
-          if (approx.rows === 4) {  // 小さいノイズを除外
-            const moments = cv.moments(contours.get(i));
-            const cx = moments.m10 / moments.m00;
-            const cy = moments.m01 / moments.m00;
-            cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
-          }
-
-          approx.delete();
-          approxVec.delete();
-        }
-      }
-
-      text.textContent = count + " : " + ct  + " : " +col + " , " + sumarea + " : " + (movie.width * movie.height);
-      // 表示
-      cv.imshow('movie', output);
-
-      // メモリ解放
-      src.delete();
-      hsv.delete();
-      red1lower.delete();
-      red1upper.delete();
-      red1mask.delete();
-      // red2lower.delete();
-      // red2upper.delete();
-      // red2mask.delete();
-      // mask.delete();
-      result.delete();
-      contours.delete();
-      hierarchy.delete();
-      output.delete();
-
-      // ycrcb.delete();
-      // channels.delete();
-      // gray.delete();
-
-      // 再度次のフレームを描画するためにrequestAnimationFrameを使う
-      requestAnimationFrame(drawCameraToCanvas);
-    }
-
-    function vkeybord() {
-      console.log("バーチャルキーボード開始");
-
-      console.log(constrains);
-      navigator.mediaDevices.getUserMedia(constrains)
-      .then(function (stream) {
-        curSTREAM = stream;
-        video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
-        video.play();
-
-        const videoTrack = stream.getVideoTracks()[0];
-        // ビデオトラックの設定を取得
-        const settings = videoTrack.getSettings();
-        // カメラの解像度を取得
-        video.width  = settings.width;
-        video.height = settings.height;
-        console.log(video.height);
-
-        // movie.width = movie.height *video.width /video.height
-        // canvas.height = canvas.width * video.height / video.width;
-        
-        movie.width = 400;
-        movie.height = movie.width *video.height /video.width;
-
-        // text.textContent = canvas.width + ":" + canvas.height;
-
-        // 映像の準備ができたら描画開始
-        video.onplaying = () => {
-          drawCameraToCanvas();
-        };
-
-        console.log("dl");
-      })
-      .catch(function(err) {
-          console.log("An error occured! " + err);
-      })
-    }
-
-    window.addEventListener('load' , function(){
-      console.log("初期読み込み完了");
-      console.log(cv);
-      console.log(typeof (cv.imread));
-
-      // canvas.width  = window.innerWidth;
-      // canvas.height = window.innerHeight;
-      console.log(video.height);
+    let sumarea = 0;
+    // ブロブを描画
+    // const output = src.clone();
+    const output = result.clone();
+    for (let i = 0; i < contours.size(); i++) {
+      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
+      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       
-      // video.style = 'display:none';
-      video.muted = 'true';
-      // movie.style = 'display:none';
+      // 面積でフィルタしたり、重心を求める例：
+      const area = cv.contourArea(contours.get(i));
+      sumarea = sumarea + area;
 
-      vkeybord();
-    });
+      if (area > 100){
 
-  </script>
+        const perimeter = cv.arcLength(contours.get(i), true);
+        // 円形度の計算
+        const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+
+        const approx = new cv.Mat();
+        cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
+
+        // drawContours には MatVector が必要なのでラップする
+        const approxVec = new cv.MatVector();
+        approxVec.push_back(approx);
+
+        // 緑で描画（単純化された輪郭）
+        cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
+        
+        if (approx.rows === 4) {  // 小さいノイズを除外
+          const moments = cv.moments(contours.get(i));
+          const cx = moments.m10 / moments.m00;
+          const cy = moments.m01 / moments.m00;
+          cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+        }
+
+        approx.delete();
+        approxVec.delete();
+      }
+    }
+
+    text.textContent = count + " : " + ct + " , " + sumarea + " : " + (movie.width * movie.height);
+    // 表示
+    cv.imshow('movie', output);
+
+    // メモリ解放
+    src.delete();
+    hsv.delete();
+    red1lower.delete();
+    red1upper.delete();
+    red1mask.delete();
+    // red2lower.delete();
+    // red2upper.delete();
+    // red2mask.delete();
+    // mask.delete();
+    result.delete();
+    contours.delete();
+    hierarchy.delete();
+    output.delete();
+
+    // ycrcb.delete();
+    // channels.delete();
+    // gray.delete();
+
+    // 再度次のフレームを描画するためにrequestAnimationFrameを使う
+    requestAnimationFrame(drawCameraToCanvas);
+  }
+
+  function vkeybord() {
+    console.log("バーチャルキーボード開始");
+
+    console.log(constrains);
+    navigator.mediaDevices.getUserMedia(constrains)
+    .then(function (stream) {
+      curSTREAM = stream;
+      video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
+      video.play();
+
+      const videoTrack = stream.getVideoTracks()[0];
+      // ビデオトラックの設定を取得
+      const settings = videoTrack.getSettings();
+      // カメラの解像度を取得
+      video.width  = settings.width;
+      video.height = settings.height;
+      console.log(video.height);
+
+      // movie.width = movie.height *video.width /video.height
+      // canvas.height = canvas.width * video.height / video.width;
+      
+      movie.width = 400;
+      movie.height = movie.width *video.height /video.width;
+
+      // text.textContent = canvas.width + ":" + canvas.height;
+
+      // 映像の準備ができたら描画開始
+      video.onplaying = () => {
+        drawCameraToCanvas();
+      };
+
+      console.log("dl");
+    })
+    .catch(function(err) {
+        console.log("An error occured! " + err);
+    })
+  }
+
+  window.addEventListener('load' , function(){
+    console.log("初期読み込み完了");
+    console.log(cv);
+    console.log(typeof (cv.imread));
+
+    // canvas.width  = window.innerWidth;
+    // canvas.height = window.innerHeight;
+    console.log(video.height);
+    
+    // video.style = 'display:none';
+    video.muted = 'true';
+    // movie.style = 'display:none';
+
+    vkeybord();
+  });
+
+</script>
 </body>
 </html>
