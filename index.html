@@ -61,7 +61,7 @@
   });
 
   stopbutton.addEventListener('click', function(){
-    ct = (ct +1) % 250;
+    ct = (ct +1) % 25;
     text.textContent = count + " : " + ct;
   });
 
@@ -120,8 +120,8 @@
     // let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 80, 120, 0]);  // 下限
     // let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [100 , 255, 255, 0]); // 上限
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct ,80, count *10, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct  +1, 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct *10,80, count *10, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct *10 +1, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
