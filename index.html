@@ -55,17 +55,17 @@
   let count = 0;
   let ct =0;
 
-  // startbutton.addEventListener('click', function(){
-  //   count = (count +1) % 200;
-  //   text.textContent = count + " : " + ct;
-  // });
+  startbutton.addEventListener('click', function(){
+    count = (count +1) % 200;
+    text.textContent = count + " : " + ct;
+  });
 
-  // stopbutton.addEventListener('click', function(){
-  //   ct = (ct +1) % 25;
-  //   text.textContent = count + " : " + ct;
-  // });
+  stopbutton.addEventListener('click', function(){
+    ct = (ct +1) % 25;
+    text.textContent = count + " : " + ct;
+  });
 
-  // text.textContent = count + " : " + ct;
+  text.textContent = count + " : " + ct;
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
@@ -105,8 +105,8 @@
 
     // cv.imshow("canvas", hsv);
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 , 80, 120, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 , 255, 255, 0]); // 上限
+    // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 , 80, 120, 0]);  // 下限
+    // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 , 255, 255, 0]); // 上限
 
     // let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [105 , 80, 120, 0]);  // 下限
     // let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [115 , 255, 255, 0]); // 上限
@@ -120,8 +120,8 @@
     // let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 80, 120, 0]);  // 下限
     // let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [100 , 255, 255, 0]); // 上限
 
-    // let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [150,100, count *10, 0]);  // 下限
-    // let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [180, 255, 255, 0]); // 上限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0,ct *10, count *10, 0]);  // 下限
+    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [255, 255, 255, 0]); // 上限
 
     let red1mask = new cv.Mat();
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
@@ -137,8 +137,8 @@
     // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
-    // let result = new cv.Mat();
-    // cv.bitwise_and(src, src, result, red1mask);
+    let result = new cv.Mat();
+    cv.bitwise_and(src, src, result, red1mask);
 
     // 輪郭検出
     const contours = new cv.MatVector();
@@ -147,7 +147,8 @@
 
     let sumarea = 0;
     // ブロブを描画
-    const output = src.clone();
+    // const output = src.clone();
+    const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
       const color = new cv.Scalar(255, 0, 0, 255);  // 赤
       cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
@@ -198,7 +199,7 @@
     // red2upper.delete();
     // red2mask.delete();
     // mask.delete();
-    // result.delete();
+    result.delete();
     contours.delete();
     hierarchy.delete();
     output.delete();
