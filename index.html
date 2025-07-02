@@ -166,8 +166,8 @@
 
     let sumarea = 0;
     // ブロブを描画
-    // const output = src.clone();
-    const output = result.clone();
+    const output = src.clone();
+    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
       const color = new cv.Scalar(255, 0, 0, 255);  // 赤
       // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
