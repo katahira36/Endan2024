@@ -105,6 +105,8 @@
 
     // cv.imshow("canvas", hsv);
 
+    let mask = [];
+
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 50 , 40, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
     let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 ,50, 40, 0]);  // 下限
@@ -130,89 +132,96 @@
     cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
     let red2mask = new cv.Mat();
     cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
+    let redmask = new cv.Mat();
+    cv.bitwise_or(red1mask, red2mask, redmask);
+    mask.push(redmask);
 
     let bluemask = new cv.Mat();
     cv.inRange(hsv, blue1lower, blue1upper, bluemask);
+    mask.push(bluemask);
 
     let greenmask = new cv.Mat();
     cv.inRange(hsv, green1lower, green1upper, greenmask);
+    mask.push(greenmask);
 
     let yellowmask = new cv.Mat();
     cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
+    mask.push(yellowmask);
 
     let skymask = new cv.Mat();
     cv.inRange(hsv, sky1lower, sky1upper, skymask);
+    mask.push(skymask);
 
-    let mask = new cv.Mat();
-    cv.bitwise_or(red1mask, red2mask, mask);
-    cv.bitwise_or(bluemask, mask, mask);
-    cv.bitwise_or(greenmask, mask, mask);
-    cv.bitwise_or(yellowmask, mask, mask);
-    cv.bitwise_or(skymask, mask, mask);
+    // let mask = new cv.Mat();
+    // cv.bitwise_or(red1mask, red2mask, mask);
+    // cv.bitwise_or(bluemask, mask, mask);
+    // cv.bitwise_or(greenmask, mask, mask);
+    // cv.bitwise_or(yellowmask, mask, mask);
+    // cv.bitwise_or(skymask, mask, mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
     // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
     // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
     // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
-    // マスクを適用して抽出
+    マスクを適用して抽出
     let result = new cv.Mat();
-    // cv.bitwise_and(src, src, result, mask);
+    cv.bitwise_and(src, src, result, yellowmask);
 
-    // 輪郭検出
-    const contours = new cv.MatVector();
-    const hierarchy = new cv.Mat();
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    // // 輪郭検出
+    // const contours = new cv.MatVector();
+    // const hierarchy = new cv.Mat();
+    // cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-    let sumarea = 0;
-    // ブロブを描画
-    const output = src.clone();
-    // const output = result.clone();
-    for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+    // let sumarea = 0;
+    // // ブロブを描画
+    // const output = src.clone();
+    // // const output = result.clone();
+    // for (let i = 0; i < contours.size(); i++) {
+    //   const color = new cv.Scalar(255, 0, 0, 255);  // 赤
+    //   // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       
-      // 面積でフィルタしたり、重心を求める例：
-      const area = cv.contourArea(contours.get(i));
-      sumarea = sumarea + area;
+    //   // 面積でフィルタしたり、重心を求める例：
+    //   const area = cv.contourArea(contours.get(i));
+    //   sumarea = sumarea + area;
 
-      if (area > 500 && area < 10000){
+    //   if (area > 500 && area < 10000){
 
-        // const perimeter = cv.arcLength(contours.get(i), true);
-        // // 円形度の計算
-        // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+    //     // const perimeter = cv.arcLength(contours.get(i), true);
+    //     // // 円形度の計算
+    //     // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
 
-        const rect = cv.boundingRect(contours.get(i));
-        const aspectRatio = rect.width / rect.height;
+    //     const rect = cv.boundingRect(contours.get(i));
+    //     const aspectRatio = rect.width / rect.height;
 
-        // const approx = new cv.Mat();
-        // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
+    //     // const approx = new cv.Mat();
+    //     // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
 
-        // drawContours には MatVector が必要なのでラップする
-        // const approxVec = new cv.MatVector();
-        // approxVec.push_back(approx);
+    //     // drawContours には MatVector が必要なのでラップする
+    //     // const approxVec = new cv.MatVector();
+    //     // approxVec.push_back(approx);
 
-        // 緑で描画（単純化された輪郭）
-        // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
+    //     // 緑で描画（単純化された輪郭）
+    //     // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
-        if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
-          cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+    //     if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
+    //       cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
 
-          const moments = cv.moments(contours.get(i));
-          const cx = moments.m10 / moments.m00;
-          const cy = moments.m01 / moments.m00;
-          cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
-        }
+    //       const moments = cv.moments(contours.get(i));
+    //       const cx = moments.m10 / moments.m00;
+    //       const cy = moments.m01 / moments.m00;
+    //       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+    //     }
 
-        // approx.delete();
-        // approxVec.delete();
-      }
-    }
+    //     // approx.delete();
+    //     // approxVec.delete();
+    //   }
+    // }
 
     // text.textContent = count + " : " + ct + " , " + sumarea + " : " + (movie.width * movie.height);
     // 表示
-    cv.imshow('movie', output);
-    // cv.imshow('movie', result);
+    // cv.imshow('movie', output);
+    cv.imshow('movie', result);
 
     // メモリ解放
     src.delete();
@@ -223,6 +232,7 @@
     red2lower.delete();
     red2upper.delete();
     red2mask.delete();
+    redmask.delete();
     blue1lower.delete();
     blue1upper.delete();
     bluemask.delete();
@@ -237,9 +247,9 @@
     skymask.delete();
     mask.delete();
     result.delete();
-    contours.delete();
-    hierarchy.delete();
-    output.delete();
+    // contours.delete();
+    // hierarchy.delete();
+    // output.delete();
 
     // ycrcb.delete();
     // channels.delete();
