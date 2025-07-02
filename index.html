@@ -176,7 +176,7 @@
       const area = cv.contourArea(contours.get(i));
       sumarea = sumarea + area;
 
-      if (area > 1000 || area < 20000){
+      if (area > 1000 && area < 20000){
 
         // const perimeter = cv.arcLength(contours.get(i), true);
         // // 円形度の計算
@@ -195,7 +195,7 @@
         // 緑で描画（単純化された輪郭）
         // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
-        if (aspectRatio < 3.0 || aspectRatio > (1.0/3)) {  // 小さいノイズを除外
+        if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
           cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
 
           const moments = cv.moments(contours.get(i));
