@@ -105,7 +105,7 @@
 
     // cv.imshow("canvas", hsv);
 
-    let mask = [];
+    // let mask = [];
 
     let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 50 , 40, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
@@ -134,23 +134,23 @@
     cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
     let redmask = new cv.Mat();
     cv.bitwise_or(red1mask, red2mask, redmask);
-    mask.push(redmask);
+    // mask.push(redmask);
 
     let bluemask = new cv.Mat();
     cv.inRange(hsv, blue1lower, blue1upper, bluemask);
-    mask.push(bluemask);
+    // mask.push(bluemask);
 
     let greenmask = new cv.Mat();
     cv.inRange(hsv, green1lower, green1upper, greenmask);
-    mask.push(greenmask);
+    // mask.push(greenmask);
 
     let yellowmask = new cv.Mat();
     cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
-    mask.push(yellowmask);
+    // mask.push(yellowmask);
 
     let skymask = new cv.Mat();
     cv.inRange(hsv, sky1lower, sky1upper, skymask);
-    mask.push(skymask);
+    // mask.push(skymask);
 
     // let mask = new cv.Mat();
     // cv.bitwise_or(red1mask, red2mask, mask);
@@ -245,7 +245,7 @@
     sky1lower.delete();
     sky1upper.delete();
     skymask.delete();
-    mask.delete();
+    // mask.delete();
     result.delete();
     // contours.delete();
     // hierarchy.delete();
