@@ -119,7 +119,7 @@
     let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [78 , 255, 255, 0]); // 上限
 
     let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10 +ct , 50, 65, 0]);  // 下限
-    let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [32 +count, 255, 255, 0]); // 上限
+    let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [32 -count, 255, 255, 0]); // 上限
 
     let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 70, 60, 0]);  // 下限
     let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 255, 255, 0]); // 上限
