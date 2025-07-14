@@ -144,7 +144,7 @@
     cv.inRange(hsv, green1lower, green1upper, greenmask);
     // mask.push(greenmask);
 
-    cv.bitwise_or(red1mask, greenmask, redmask);
+    cv.bitwise_or(red2mask, greenmask, redmask);
     let yellowmask = new cv.Mat();
     cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
     // mask.push(yellowmask);
