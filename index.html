@@ -110,10 +110,10 @@
 
     // let mask = [];
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 0 , 0, 0]);  // 下限
+    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 70 , 0, 0]);  // 下限
     let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
-    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [165 ,0, 0, 0]);  // 下限
-    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [200, 255, 255, 0]); // 上限
+    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 ,70, 0, 0]);  // 下限
+    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [185, 255, 255, 0]); // 上限
 
     let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 200, 0, 0]);  // 下限
     let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [117 , 255, 255, 0]); // 上限
