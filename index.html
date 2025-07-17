@@ -115,39 +115,39 @@
    
     console.log("mask")
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    cv.inRange(hsv, cv.Scalar(175, 70, 180, 0), cv.Scalar(200, 255, 255, 0), mask); // 色の範囲でマスク作成
-    cv.inRange(hsv, cv.Scalar(175, 150, 10, 0), cv.Scalar(200, 255, 180, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(175, 70, 180, 0), new cv.Scalar(200, 255, 255, 0), mask); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(175, 150, 10, 0), new cv.Scalar(200, 255, 180, 0), masks); // 色の範囲でマスク作成
     console.log("rmask")
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(0, 70, 180, 0), cv.Scalar(5, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(0, 70, 180, 0), new cv.Scalar(5, 255, 255, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(0, 150, 10, 0), cv.Scalar(5, 255, 180, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(0, 150, 10, 0), new cv.Scalar(5, 255, 180, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(redmask);
 
-    cv.inRange(hsv, cv.Scalar(15, 70, 220, 0), cv.Scalar(30, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(15, 70, 220, 0), new cv.Scalar(30, 255, 255, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(7, 220, 10, 0), cv.Scalar(20, 255, 2200, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(7, 220, 10, 0), new cv.Scalar(20, 255, 2200, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(yellowmask);
 
-    cv.inRange(hsv, cv.Scalar(65, 70, 170, 0), cv.Scalar(78, 200, 255, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(65, 70, 170, 0), new cv.Scalar(78, 200, 255, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(69, 180, 4, 0), cv.Scalar(74, 255, 190, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(69, 180, 4, 0), new cv.Scalar(74, 255, 190, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(greenmask);
 
-    cv.inRange(hsv, cv.Scalar(90, 50, 150, 0), cv.Scalar(100, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(90, 50, 150, 0), new cv.Scalar(100, 255, 255, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(95, 150, 10, 0), cv.Scalar(111, 255, 150, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(95, 150, 10, 0), new cv.Scalar(111, 255, 150, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(skymask);
 
-    cv.inRange(hsv, cv.Scalar(114, 250, 3, 0), cv.Scalar(140, 255, 25, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(114, 250, 3, 0), new cv.Scalar(140, 255, 25, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(110, 160, 25, 0), cv.Scalar(120, 255, 110, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(110, 160, 25, 0), new cv.Scalar(120, 255, 110, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    cv.inRange(hsv, cv.Scalar(105, 10, 100, 0), cv.Scalar(122, 200, 230, 0), masks); // 色の範囲でマスク作成
+    cv.inRange(hsv, new cv.Scalar(105, 10, 100, 0), new cv.Scalar(122, 200, 230, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(bluemask);
 
