@@ -151,14 +151,14 @@
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
-    upperb.setTo(new cv.Scalar(74, 255, 190, 0));
+    upperb.setTo(new cv.Scalar(78, 255, 190, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(greenmask);
 
     console.log("smask");
     lowerb.setTo(new cv.Scalar(90, 50, 150, 0));
-    upperb.setTo(new cv.Scalar(100, 255, 255, 0));
+    upperb.setTo(new cv.Scalar(105, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(95, 150, 10, 0));
