@@ -113,9 +113,11 @@
     let mask = new cv.Mat();
     let masks = new cv.Mat();
    
+    console.log("mask")
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
     cv.inRange(hsv, cv.Scalar(175, 70, 180, 0), cv.Scalar(200, 255, 255, 0), mask); // 色の範囲でマスク作成
     cv.inRange(hsv, cv.Scalar(175, 150, 10, 0), cv.Scalar(200, 255, 180, 0), masks); // 色の範囲でマスク作成
+    console.log("rmask")
     cv.add(masks, mask, mask);
     cv.inRange(hsv, cv.Scalar(0, 70, 180, 0), cv.Scalar(5, 255, 255, 0), masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
@@ -151,6 +153,7 @@
 
     cv.inRange(mask, new cv.Scalar(1, 1, 1, 1), new cv.Scalar(255, 255, 255, 255), mask);
 
+    console.log("fmask")
     // 4. モルフォロジー変換（ノイズ除去）
     // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
     // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
@@ -243,14 +246,14 @@
       video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
       video.play();
 
-      // const videoTrack = stream.getVideoTracks()[0];
+      const videoTrack = stream.getVideoTracks()[0];
       // // ビデオトラックの設定を取得
-      // const settings = videoTrack.getSettings();
+      const settings = videoTrack.getSettings();
       // // カメラの解像度を取得
       // video.width  = settings.width;
       // video.height = settings.height;
       console.log(video.height);
-      text.textContent = video.width + " : " + video.height ;
+      text.textContent = settings.width + " : " + settings.height ;
 
       // movie.width = movie.height *video.width /video.height
       // canvas.height = canvas.width * video.height / video.width;
