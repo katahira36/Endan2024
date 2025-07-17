@@ -139,7 +139,7 @@
     upperb.setTo(new cv.Scalar(30, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    lowerb.setTo(new cv.Scalar(7, 220, 10, 0));
+    lowerb.setTo(new cv.Scalar(7, 230, 10, 0));
     upperb.setTo(new cv.Scalar(20, 255, 220, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
@@ -150,7 +150,7 @@
     upperb.setTo(new cv.Scalar(78, 200, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
-    lowerb.setTo(new cv.Scalar(69, 180, 4, 0));
+    lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
     upperb.setTo(new cv.Scalar(74, 255, 190, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
