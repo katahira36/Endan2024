@@ -147,7 +147,7 @@
 
     console.log("gmask");
     lowerb.setTo(new cv.Scalar(65, 70, 170, 0));
-    upperb.setTo(new cv.Scalar(78, 200, 255, 0));
+    upperb.setTo(new cv.Scalar(78, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
@@ -177,7 +177,7 @@
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(105, 10, 100, 0));
-    upperb.setTo(new cv.Scalar(122, 200, 230, 0));
+    upperb.setTo(new cv.Scalar(122, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
     cv.add(masks, mask, mask);
     // mask.push(bluemask);
