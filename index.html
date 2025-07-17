@@ -23,7 +23,7 @@
 <canvas id="movie" ></canvas>
 <!-- <canvas id="canvas"></canvas> -->
 
-<img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example">
+<!-- <img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example"> -->
 
 <p id="text"></p>
 
@@ -49,7 +49,7 @@
 
   const text = document.getElementById("text");
 
-  const img = document.getElementById("image")
+  // const img = document.getElementById("image")
 
   const startbutton = document.getElementById('start');
   const stopbutton = document.getElementById('stop');
@@ -71,8 +71,8 @@
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-    // let src = cv.imread(movie);
-    let src = cv.imread(img);
+    let src = cv.imread(movie);
+    // let src = cv.imread(img);
 
     // const ycrcb = new cv.Mat();
     // cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
@@ -110,57 +110,46 @@
 
     // let mask = [];
 
-    let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [0 , 70 , 0, 0]);  // 下限
-    let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [5 , 255, 255, 0]); // 上限
-    let red2lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175 ,70, 0, 0]);  // 下限
-    let red2upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [185, 255, 255, 0]); // 上限
-
-    let blue1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 200, 0, 0]);  // 下限
-    let blue1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [117 , 255, 255, 0]); // 上限
-
-    let green1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [60 , 60, 0, 0]);  // 下限
-    let green1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [78 , 255, 255, 0]); // 上限
-
-    let yellow1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [10 +ct , 50, 0, 0]);  // 下限
-    let yellow1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [32 -count, 255, 255, 0]); // 上限
-
-    let sky1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [90 , 70, 0, 0]);  // 下限
-    let sky1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [104 , 255, 255, 0]); // 上限
-
-    // let red1lower = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct ,80, count *10, 0]);  // 下限
-    // let red1upper = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [ct  +1, 255, 255, 0]); // 上限
-
-    let red1mask = new cv.Mat();
+    let mask = new cv.Mat();
+    let masks = new cv.Mat();
+   
     // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
-    let red2mask = new cv.Mat();
-    cv.inRange(hsv, red2lower, red2upper, red2mask); // 色の範囲でマスク作成
-    let redmask = new cv.Mat();
-    cv.bitwise_or(red1mask, red2mask, redmask);
+    cv.inRange(hsv, cv.Scalar(175, 70, 180, 0), cv.Scalar(200, 255, 255, 0), mask); // 色の範囲でマスク作成
+    cv.inRange(hsv, cv.Scalar(175, 150, 10, 0), cv.Scalar(200, 255, 180, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(0, 70, 180, 0), cv.Scalar(5, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(0, 150, 10, 0), cv.Scalar(5, 255, 180, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
     // mask.push(redmask);
 
-    let bluemask = new cv.Mat();
-    cv.inRange(hsv, blue1lower, blue1upper, bluemask);
-    // mask.push(bluemask);
-
-    let greenmask = new cv.Mat();
-    cv.inRange(hsv, green1lower, green1upper, greenmask);
-    // mask.push(greenmask);
-
-    let yellowmask = new cv.Mat();
-    cv.inRange(hsv, yellow1lower, yellow1upper, yellowmask);
+    cv.inRange(hsv, cv.Scalar(15, 70, 220, 0), cv.Scalar(30, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(7, 220, 10, 0), cv.Scalar(20, 255, 2200, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
     // mask.push(yellowmask);
 
-    let skymask = new cv.Mat();
-    cv.inRange(hsv, sky1lower, sky1upper, skymask);
+    cv.inRange(hsv, cv.Scalar(65, 70, 170, 0), cv.Scalar(78, 200, 255, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(69, 180, 4, 0), cv.Scalar(74, 255, 190, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    // mask.push(greenmask);
+
+    cv.inRange(hsv, cv.Scalar(90, 50, 150, 0), cv.Scalar(100, 255, 255, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(95, 150, 10, 0), cv.Scalar(111, 255, 150, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
     // mask.push(skymask);
 
-    // let mask = new cv.Mat();
-    // cv.bitwise_or(red1mask, red2mask, mask);
-    // cv.bitwise_or(bluemask, mask, mask);
-    // cv.bitwise_or(greenmask, mask, mask);
-    // cv.bitwise_or(yellowmask, mask, mask);
-    // cv.bitwise_or(skymask, mask, mask);
+    cv.inRange(hsv, cv.Scalar(114, 250, 3, 0), cv.Scalar(140, 255, 25, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(110, 160, 25, 0), cv.Scalar(120, 255, 110, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    cv.inRange(hsv, cv.Scalar(105, 10, 100, 0), cv.Scalar(122, 200, 230, 0), masks); // 色の範囲でマスク作成
+    cv.add(masks, mask, mask);
+    // mask.push(bluemask);
+
+    cv.inRange(mask, new cv.Scalar(1, 1, 1, 1), new cv.Scalar(255, 255, 255, 255), mask);
 
     // 4. モルフォロジー変換（ノイズ除去）
     // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
@@ -169,7 +158,7 @@
 
     // マスクを適用して抽出
     let result = new cv.Mat();
-    cv.bitwise_and(src, src, result, redmask);
+    cv.bitwise_and(src, src, result, mask);
 
     // // 輪郭検出
     // const contours = new cv.MatVector();
@@ -229,26 +218,8 @@
     // メモリ解放
     src.delete();
     hsv.delete();
-    red1lower.delete();
-    red1upper.delete();
-    red1mask.delete();
-    red2lower.delete();
-    red2upper.delete();
-    red2mask.delete();
-    redmask.delete();
-    blue1lower.delete();
-    blue1upper.delete();
-    bluemask.delete();
-    green1lower.delete();
-    green1upper.delete();
-    greenmask.delete();
-    yellow1lower.delete();
-    yellow1upper.delete();
-    yellowmask.delete();
-    sky1lower.delete();
-    sky1upper.delete();
-    skymask.delete();
-    // mask.delete();
+    mask.delete();
+    masks.delete();
     result.delete();
     // contours.delete();
     // hierarchy.delete();
@@ -272,18 +243,19 @@
       video.srcObject = stream; // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
       video.play();
 
-      const videoTrack = stream.getVideoTracks()[0];
-      // ビデオトラックの設定を取得
-      const settings = videoTrack.getSettings();
-      // カメラの解像度を取得
-      video.width  = settings.width;
-      video.height = settings.height;
+      // const videoTrack = stream.getVideoTracks()[0];
+      // // ビデオトラックの設定を取得
+      // const settings = videoTrack.getSettings();
+      // // カメラの解像度を取得
+      // video.width  = settings.width;
+      // video.height = settings.height;
       console.log(video.height);
+      text.textContent = video.width + " : " + video.height ;
 
       // movie.width = movie.height *video.width /video.height
       // canvas.height = canvas.width * video.height / video.width;
       
-      movie.width = 400;
+      movie.width = 200;
       movie.height = movie.width *video.height /video.width;
 
       // text.textContent = canvas.width + ":" + canvas.height;
