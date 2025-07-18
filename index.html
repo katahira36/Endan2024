@@ -192,73 +192,73 @@
     // let result = new cv.Mat();
     // cv.bitwise_and(src, src, result, mask);
 
-    // 輪郭検出
-    const contours = new cv.MatVector();
-    const hierarchy = new cv.Mat();
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    // // 輪郭検出
+    // const contours = new cv.MatVector();
+    // const hierarchy = new cv.Mat();
+    // cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-    console.log("brob");
-    // let sumarea = 0;
-    // ブロブを描画
-    const output = src.clone();
-    // const output = result.clone();
-    for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+    // console.log("brob");
+    // // let sumarea = 0;
+    // // ブロブを描画
+    // const output = src.clone();
+    // // const output = result.clone();
+    // for (let i = 0; i < contours.size(); i++) {
+    //   const color = new cv.Scalar(255, 0, 0, 255);  // 赤
+    //   // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       
-      // 面積でフィルタしたり、重心を求める例：
-      const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
+    //   // 面積でフィルタしたり、重心を求める例：
+    //   const area = cv.contourArea(contours.get(i));
+    //   // sumarea = sumarea + area;
+    //   console.log("area");
 
-      if (area > 125 && area < 2500){
+    //   if (area > 125 && area < 2500){
 
-        // const perimeter = cv.arcLength(contours.get(i), true);
-        // // 円形度の計算
-        // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+    //     // const perimeter = cv.arcLength(contours.get(i), true);
+    //     // // 円形度の計算
+    //     // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
 
-        // const rect = cv.boundingRect(contours.get(i));
-        // const aspectRatio = rect.width / rect.height;
+    //     // const rect = cv.boundingRect(contours.get(i));
+    //     // const aspectRatio = rect.width / rect.height;
 
-        // const approx = new cv.Mat();
-        // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
+    //     // const approx = new cv.Mat();
+    //     // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
 
-        // drawContours には MatVector が必要なのでラップする
-        // const approxVec = new cv.MatVector();
-        // approxVec.push_back(approx);
+    //     // drawContours には MatVector が必要なのでラップする
+    //     // const approxVec = new cv.MatVector();
+    //     // approxVec.push_back(approx);
 
-        // 緑で描画（単純化された輪郭）
-        // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
+    //     // 緑で描画（単純化された輪郭）
+    //     // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
-        // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
-          cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-          console.log("moment");
+    //     // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
+    //       cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+    //       console.log("moment");
 
-          const moments = cv.moments(contours.get(i));
-          const cx = moments.m10 / moments.m00;
-          const cy = moments.m01 / moments.m00;
-          cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
-        // }
+    //       const moments = cv.moments(contours.get(i));
+    //       const cx = moments.m10 / moments.m00;
+    //       const cy = moments.m01 / moments.m00;
+    //       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+    //     // }
 
-        // approx.delete();
-        // approxVec.delete();
-      }
-    }
+    //     // approx.delete();
+    //     // approxVec.delete();
+    //   }
+    // }
 
     // text.textContent = count + " : " + ct + " , " + sumarea + " : " + (movie.width * movie.height);
     // 表示
-    cv.imshow('movie', output);
-    // cv.imshow('movie', result);
+    // cv.imshow('movie', output);
+    cv.imshow('movie', result);
 
     // メモリ解放
     src.delete();
     hsv.delete();
     mask.delete();
     masks.delete();
-    // result.delete();
-    contours.delete();
-    hierarchy.delete();
-    output.delete();
+    result.delete();
+    // contours.delete();
+    // hierarchy.delete();
+    // output.delete();
 
     // ycrcb.delete();
     // channels.delete();
