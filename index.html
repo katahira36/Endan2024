@@ -197,6 +197,7 @@
     const hierarchy = new cv.Mat();
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
+    console.log("brob");
     // let sumarea = 0;
     // ブロブを描画
     const output = src.clone();
@@ -208,6 +209,7 @@
       // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
       // sumarea = sumarea + area;
+      console.log("area");
 
       if (area > 125 && area < 2500){
 
@@ -230,6 +232,7 @@
         
         if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
           cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+          console.log("moment");
 
           const moments = cv.moments(contours.get(i));
           const cx = moments.m10 / moments.m00;
