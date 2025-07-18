@@ -230,7 +230,7 @@
         // 緑で描画（単純化された輪郭）
         // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
-        if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
+        // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
           cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
           console.log("moment");
 
@@ -238,7 +238,7 @@
           const cx = moments.m10 / moments.m00;
           const cy = moments.m01 / moments.m00;
           cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
-        }
+        // }
 
         // approx.delete();
         // approxVec.delete();
