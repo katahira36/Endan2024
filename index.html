@@ -189,8 +189,8 @@
     // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
     // マスクを適用して抽出
-    // let result = new cv.Mat();
-    // cv.bitwise_and(src, src, result, mask);
+    let result = new cv.Mat();
+    cv.bitwise_and(src, src, result, mask);
 
     // // 輪郭検出
     // const contours = new cv.MatVector();
