@@ -113,6 +113,7 @@
     let rweigth = [];
     let rct = 0;
     const cweight = [1,2.72,3.24,3.61];
+    const canarea = movie.width*movie.height;
     let maxd = movie.width*movie.width + movie.height*movie.height;
     let maxdmat = [];
     for(let i = 0; i < 4; i++){
@@ -160,7 +161,7 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      if (area > movie.width*movie.height/2000 && area < movie.width*movie.height/15){
+      if (area > canarea/2000 && area < canarea/15){
         let para = [];
 
         // const perimeter = cv.arcLength(contours.get(i), true);
@@ -238,7 +239,7 @@
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[2];
           if(rweigth[j][0] > dist){
             rweigth[j][0] = dist;
           }
@@ -282,7 +283,7 @@
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[1];
           if(rweigth[j][1] > dist){
             rweigth[j][1] = dist;
           }
@@ -326,7 +327,7 @@
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[3];
           if(rweigth[j][2] > dist){
             rweigth[j][2] = dist;
           }
@@ -375,7 +376,7 @@
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[0];
           if(rweigth[j][3] > dist){
             rweigth[j][3] = dist;
           }
