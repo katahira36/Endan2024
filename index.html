@@ -113,7 +113,6 @@
     let rweigth = [];
     let rct = 0;
     const cweight = [1,2.72,3.24,3.61];
-    const canarea = movie.width*movie.height;
     let maxd = movie.width*movie.width + movie.height*movie.height;
     let maxdmat = [];
     for(let i = 0; i < 4; i++){
@@ -161,7 +160,7 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      if (area > canarea/2000 && area < canarea/15){
+      if (area > movie.width*movie.height/2000 && area < movie.width*movie.height/15){
         let para = [];
 
         // const perimeter = cv.arcLength(contours.get(i), true);
@@ -229,17 +228,17 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
+      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[2];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
           if(rweigth[j][0] > dist){
             rweigth[j][0] = dist;
           }
@@ -273,17 +272,17 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[1];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
           if(rweigth[j][1] > dist){
             rweigth[j][1] = dist;
           }
@@ -317,17 +316,17 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
+      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[3];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
           if(rweigth[j][2] > dist){
             rweigth[j][2] = dist;
           }
@@ -366,17 +365,17 @@
       // sumarea = sumarea + area;
       console.log("area");
 
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
+      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
       console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
+      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ (canarea* Math.sin(2*Math.PI* rpara[j][2] /4/canarea)) /cweight[0];
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
           if(rweigth[j][3] > dist){
             rweigth[j][3] = dist;
           }
