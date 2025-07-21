@@ -395,7 +395,7 @@
       }
       weight *= 99 + rpara[i][2] / (movie.width*movie.height);
       rdist.push(weight);
-      text.textContent += rpara[i][0]+ "," +rpara[i][1] + " : " + weight + "\n";
+      text.textContent += rpara[i][0].toFixed()+ "," +rpara[i][1].toFixed() + " : " + weight + "\n";
     }
     if(rct > 1){
       let rmax1 = 0;
