@@ -233,7 +233,7 @@
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
+      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
@@ -277,7 +277,7 @@
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
+      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
@@ -321,7 +321,7 @@
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
+      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
@@ -370,7 +370,7 @@
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
+      // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
