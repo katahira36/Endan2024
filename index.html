@@ -112,6 +112,7 @@
     let rpara = [];
     let rweigth = [];
     let rct = 0;
+    const cweight = [1,2.72,3.24,3.61];
     let maxd = movie.width*movie.width + movie.height*movie.height;
     let maxdmat = [];
     for(let i = 0; i < 4; i++){
@@ -236,8 +237,8 @@
       // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
-          const dist = (rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy);
+        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
           if(rweigth[j][0] > dist){
             rweigth[j][0] = dist;
           }
@@ -280,8 +281,8 @@
       // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
-          const dist = (rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy);
+        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
           if(rweigth[j][1] > dist){
             rweigth[j][1] = dist;
           }
@@ -324,8 +325,8 @@
       // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
-          const dist = (rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy);
+        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
           if(rweigth[j][2] > dist){
             rweigth[j][2] = dist;
           }
@@ -373,8 +374,8 @@
       // cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.5){
-          const dist = (rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy);
+        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
           if(rweigth[j][3] > dist){
             rweigth[j][3] = dist;
           }
@@ -386,13 +387,11 @@
     console.log("fmask");
 
     let rdist = [];
-    const cweight = [1,2.72,3.24,3.61]
     for(let i = 0; i < rct; i++){
       let weight = 0;
       for(let j=0;j<4;j++){
-        weight += rweigth[i][j] / cweight[j];
+        weight += rweigth[i][j];
       }
-      weight /= rpara[i][2];
       rdist.push(weight);
     }
     if(rct > 1){
