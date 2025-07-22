@@ -268,11 +268,16 @@
           }
         }
       }
-      //  // 2. 点を描く
-      // cty.beginPath();
-      // cty.arc(x, 180, 4, 0, 2 * Math.PI);
-      // cty.fillStyle = 'red';
-      // cty.fill();
+       // 2. 点を描く
+      cty.beginPath();
+      cty.arc(0, 0, 4, 0, 2 * Math.PI);
+      cty.fillStyle = 'red';
+      cty.fill();
+      cty.beginPath();
+      cty.arc(100, 100, 4, 0, 2 * Math.PI);
+      cty.fillStyle = 'red';
+      cty.fill();
+      
       cv.circle(output, new cv.Point(rpara[rmax1][0], rpara[rmax1][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
       cv.circle(output, new cv.Point(rpara[rmax2][0], rpara[rmax2][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
     }else if(rct == 1){
