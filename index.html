@@ -19,15 +19,6 @@
     ">
   </video>
   <canvas id="movie" ></canvas>
-  <canvas id="canvas" width="300" height="400" style="
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: contain;
-      background: transparent;
-    "></canvas>
 
   <img id ="overlay" src="nkey.png" style="
     position: absolute;
@@ -43,6 +34,16 @@
     background-color: rgba(0, 255, 255, 0.5);
     transform: rotate(90deg);
     transform-origin: left top;  /* 回転の中心（必要に応じて） */"></p>
+
+  <canvas id="canvas" width="300" height="400" style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+    background: transparent;
+  "></canvas>
 
 <script>
   const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
@@ -65,10 +66,8 @@
 
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-    let src = cv.imread(movie);
-
-    let hsv = new cv.Mat();
-    cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
+    let hsv = cv.imread(movie);
+    cv.cvtColor(hsv, hsv, cv.COLOR_RGB2HSV);
 
     let rpara = [];
     let rweigth = [];
@@ -103,7 +102,6 @@
     let contours = new cv.MatVector();
     let hierarchy = new cv.Mat();
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE); //ブロブ検出
-    const output = src.clone();
     for (let i = 0; i < contours.size(); i++) {
       const area = cv.contourArea(contours.get(i));
 
@@ -240,8 +238,6 @@
       }
     }
 
-    // text.textContent = "";
-
     cty.clearRect(0, 0, canvas.width, canvas.height);
 
     let rdist = [];
@@ -252,7 +248,6 @@
       }
       weight *= 99 + rpara[i][2] / (movie.width*movie.height);
       rdist.push(weight);
-      // text.textContent += rpara[i][0].toFixed()+ "," +rpara[i][1].toFixed() + " : " + weight + "\n";
     }
     if(rct > 1){
       let rmax1 = 0;
@@ -271,27 +266,23 @@
           }
         }
       }
-      cv.circle(output, new cv.Point(rpara[rmax1][0], rpara[rmax1][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
-      cv.circle(output, new cv.Point(rpara[rmax2][0], rpara[rmax2][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
+      // 2. 点を描く
+      cty.beginPath();
+      cty.arc(rpara[rmax1][0] * canvas.width /movie.width, rpara[rmax1][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+      cty.fillStyle = 'rgb(128, 128, 128)';
+      cty.fill();
+      cty.beginPath();
+      cty.arc(rpara[rmax2][0] * canvas.width /movie.width, rpara[rmax2][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+      cty.fillStyle = 'rgb(128, 128, 128)';
+      cty.fill();
     }else if(rct == 1){
-      cv.circle(output, new cv.Point(rpara[0][0], rpara[0][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
+      cty.beginPath();
+      cty.arc(rpara[0][0] * canvas.width /movie.width, rpara[0][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+      cty.fillStyle = 'rgb(128, 128, 128)';
+      cty.fill();
     }
 
-    // 2. 点を描く
-      cty.beginPath();
-      cty.arc(0, 0, 4, 0, 2 * Math.PI);
-      cty.fillStyle = 'red';
-      cty.fill();
-      cty.beginPath();
-      cty.arc(100, 100, 4, 0, 2 * Math.PI);
-      cty.fillStyle = 'red';
-      cty.fill();
-      
-
-    cv.imshow('movie', output);
-
     // メモリ解放
-    src.delete();
     hsv.delete();
     mask.delete();
     masks.delete();
@@ -299,7 +290,6 @@
     upperb.delete();
     contours.delete();
     hierarchy.delete();
-    output.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
