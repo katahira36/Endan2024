@@ -19,13 +19,15 @@
     ">
   </video>
   <canvas id="movie" ></canvas>
-  <canvas id="canvas" style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-      "></canvas>
+  <canvas id="canvas" width="300" height="400" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      background: transparent;
+    "></canvas>
 
   <img id ="overlay" src="nkey.png" style="
     position: absolute;
@@ -35,6 +37,7 @@
 
   <p id="text" style="
     position: absolute;
+    top: 0;
     font-size: 30px;
     color: rgba(255, 128, 0, 0.7);
     background-color: rgba(0, 255, 255, 0.5);
@@ -325,8 +328,7 @@
       overlay.style.left = `${rect.left + rect.width / 2 - overlay.width/2}px`; // 50 = 半分の画像幅
       overlay.style.top = `${rect.top + rect.height / 2 - overlay.height/2}px`;  // 50 = 半分の画像高さ
       text.style.left = `${rect.left + rect.width}px`;
-      text.style.top = `${(rect.height - rect.width *4 /3)/2}px`;
-
+      
       movie.width = 210;
       movie.height = movie.width *video.height /video.width;
 
