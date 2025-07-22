@@ -17,26 +17,33 @@
 </head>
 <body>
   
-<div style="position: relative; width: 100vw; height: 100vh; overflow: hidden;">
-  <video id="video" width="100%" height="100%" autoplay muted style="object-fit: contain;"></video>
-
-  <img src="keybord.png" style="
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(deg);
-  ">
-</div>
-
+  <video id="video" autoplay muted playsinline
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      background: black;  /* 背景が出るので任意で色を */
+      z-index: -1;
+    ">
+  </video>
 <canvas id="movie" ></canvas>
 <!-- <canvas id="canvas"></canvas> -->
+
+<img src="keybord.png" style="
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+  ">
 
 <!-- <img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example"> -->
 
 <p id="text"></p>
 
-<button class="hogehoge" type="button" id="start">bright</button>
-<button class="hogehoge" type="button" id="stop">coler</button>
+<!-- <button class="hogehoge" type="button" id="start">bright</button>
+<button class="hogehoge" type="button" id="stop">coler</button> -->
 <!-- <botton type="button" id="download">dl</botton> -->
 
 <script>
@@ -59,21 +66,21 @@
 
   // const img = document.getElementById("image")
 
-  const startbutton = document.getElementById('start');
-  const stopbutton = document.getElementById('stop');
+  // const startbutton = document.getElementById('start');
+  // const stopbutton = document.getElementById('stop');
 
-  let count = 0;
-  let ct =0;
+  // let count = 0;
+  // let ct =0;
 
-  startbutton.addEventListener('click', function(){
-    count = (count +1) % 25;
-    text.textContent = count + " : " + ct;
-  });
+  // startbutton.addEventListener('click', function(){
+  //   count = (count +1) % 25;
+  //   text.textContent = count + " : " + ct;
+  // });
 
-  stopbutton.addEventListener('click', function(){
-    ct = (ct +1) % 200;
-    text.textContent = count + " : " + ct;
-  });
+  // stopbutton.addEventListener('click', function(){
+  //   ct = (ct +1) % 200;
+  //   text.textContent = count + " : " + ct;
+  // });
 
   text.textContent = count + " : " + ct;
 
