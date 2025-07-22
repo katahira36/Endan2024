@@ -32,12 +32,7 @@
 <canvas id="movie" ></canvas>
 <!-- <canvas id="canvas"></canvas> -->
 
-<img src="keybord.png" style="
-    top: 50vh;
-    left: 50vw;
-    /* transform: translate(-50%, -50%); */
-    opacity: 0.5;
-  ">
+<img id ="overlay" src="keybord.png" style="opacity: 0.5;">
 
 <!-- <img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example"> -->
 
@@ -62,6 +57,8 @@
 
   const ctx = movie.getContext("2d");
   // const cty = canvas.getContext("2d");
+
+  const overlay = document.getElementById('overlay');
 
   const text = document.getElementById("text");
 
@@ -540,6 +537,10 @@
       video.height = settings.height;
       console.log(video.height);
       text.textContent = settings.width + " : " + settings.height ;
+
+      const rect = video.getBoundingClientRect();
+      overlay.style.left = `${rect.left + rect.width / 2 - overlay.width/2}px`; // 50 = 半分の画像幅
+      overlay.style.top = `${rect.top + rect.height / 2 - overlay.height/2}px`;  // 50 = 半分の画像高さ
 
       // movie.width = movie.height *video.width /video.height
       // canvas.height = canvas.width * video.height / video.width;
