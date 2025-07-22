@@ -237,7 +237,7 @@
       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
           const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
           if(rweigth[j][0] > dist){
             rweigth[j][0] = dist;
@@ -281,7 +281,7 @@
       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
           const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
           if(rweigth[j][1] > dist){
             rweigth[j][1] = dist;
@@ -325,7 +325,7 @@
       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.33){
+        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
           const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
           if(rweigth[j][2] > dist){
             rweigth[j][2] = dist;
@@ -374,7 +374,7 @@
       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
-        if ((rpara[j][2] - area)/ rpara[j][2] > 0.666){
+        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
           const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
           if(rweigth[j][3] > dist){
             rweigth[j][3] = dist;
