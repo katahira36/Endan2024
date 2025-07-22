@@ -520,8 +520,8 @@
       // // ビデオトラックの設定を取得
       const settings = videoTrack.getSettings();
       // // カメラの解像度を取得
-      // video.width  = settings.width;
-      // video.height = settings.height;
+      video.width  = 2 *settings.width;
+      video.height = 2 *settings.height;
       console.log(video.height);
       text.textContent = settings.width + " : " + settings.height ;
 
