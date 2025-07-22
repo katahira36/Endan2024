@@ -17,9 +17,18 @@
 </head>
 <body>
   
-  <div class="camera">
-    <video id="video" autoplay playsinline></video>
-</div><br>
+  <video id="video" autoplay muted playsinline
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      background: black;  /* 背景が出るので任意で色を */
+      z-index: -1;
+    ">
+  </video>
 <canvas id="movie" ></canvas>
 <!-- <canvas id="canvas"></canvas> -->
 
@@ -520,8 +529,8 @@
       // // ビデオトラックの設定を取得
       const settings = videoTrack.getSettings();
       // // カメラの解像度を取得
-      video.width  = 2 *settings.width;
-      video.height = 2 *settings.height;
+      video.width  = settings.width;
+      video.height = settings.height;
       console.log(video.height);
       text.textContent = settings.width + " : " + settings.height ;
 
@@ -555,7 +564,6 @@
     console.log(video.height);
     
     // video.style = 'display:none';
-    video.muted = 'true';
     movie.style = 'display:none';
 
     vkeybord();
