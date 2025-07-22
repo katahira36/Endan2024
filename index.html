@@ -40,7 +40,7 @@
 
 <!-- <img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example"> -->
 
-<p id="text"></p>
+<p id="text" style="position: absolute; color: rgba(255, 128, 0, 0.7); background-color: rgba(0, 255, 255, 0.5);"></p>
 
 <!-- <button class="hogehoge" type="button" id="start">bright</button>
 <button class="hogehoge" type="button" id="stop">coler</button> -->
@@ -545,6 +545,8 @@
       const rect = video.getBoundingClientRect();
       overlay.style.left = `${rect.left + rect.width / 2 - overlay.width/2}px`; // 50 = 半分の画像幅
       overlay.style.top = `${rect.top + rect.height / 2 - overlay.height/2}px`;  // 50 = 半分の画像高さ
+      text.style.left = overlay.style.left;
+      text.style.bottom = overlay.style.top;
 
       // movie.width = movie.height *video.width /video.height
       // canvas.height = canvas.width * video.height / video.width;
