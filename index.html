@@ -1,19 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" charset='utf-8'.> -->
   <meta charset='utf8'>
-  <!-- <style >.hogehoge {
-    padding: 20px;
-    margin: 20px;
-  }
-  /* .wrapper{
-  width: 100%;
-  height: 100%;
-} */
-  </style> -->
   <script async src="opencv.js" type="text/javascript"></script>
-  <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript" onload="OpenCvReady();"></script> -->
 </head>
 <body>
   
@@ -29,109 +18,55 @@
       z-index: -1;
     ">
   </video>
-<canvas id="movie" ></canvas>
-<!-- <canvas id="canvas"></canvas> -->
+  <canvas id="movie" ></canvas>
+  <canvas id="canvas" style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      "></canvas>
 
-<img id ="overlay" src="nkey.png" style="
-  position: absolute;
-  width: 75%;
-  height: 75%;
-  opacity: 0.5;">
+  <img id ="overlay" src="nkey.png" style="
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    opacity: 0.5;">
 
-<!-- <img id="image" src="Screenshot_20250708-144425_Chrome.jpg" alt="example"> -->
-
-<p id="text" style="
-  position: absolute;
-  font-size: 30px;
-  color: rgba(255, 128, 0, 0.7);
-  background-color: rgba(0, 255, 255, 0.5);
-  transform: rotate(90deg);
-  transform-origin: left top;  /* 回転の中心（必要に応じて） */"></p>
-
-<!-- <button class="hogehoge" type="button" id="start">bright</button>
-<button class="hogehoge" type="button" id="stop">coler</button> -->
-<!-- <botton type="button" id="download">dl</botton> -->
+  <p id="text" style="
+    position: absolute;
+    font-size: 30px;
+    color: rgba(255, 128, 0, 0.7);
+    background-color: rgba(0, 255, 255, 0.5);
+    transform: rotate(90deg);
+    transform-origin: left top;  /* 回転の中心（必要に応じて） */"></p>
 
 <script>
   const video = document.getElementById('video');// 適当にvideoタグのオブジェクトを取得
 
   var constrains = { 
-    // video: {facingMode:{   "user"
     video: {facingMode:   "environment"
     }
   }
   var curSTREAM = null;
 
   const movie = document.getElementById("movie");
-  // const canvas = document.getElementById("canvas");
+  const canvas = document.getElementById("canvas");
 
   const ctx = movie.getContext("2d");
-  // const cty = canvas.getContext("2d");
+  const cty = canvas.getContext("2d");
 
   const overlay = document.getElementById('overlay');
 
   const text = document.getElementById("text");
 
-  // const img = document.getElementById("image")
-
-  // const startbutton = document.getElementById('start');
-  // const stopbutton = document.getElementById('stop');
-
-  // let count = 0;
-  // let ct =0;
-
-  // startbutton.addEventListener('click', function(){
-  //   count = (count +1) % 25;
-  //   text.textContent = count + " : " + ct;
-  // });
-
-  // stopbutton.addEventListener('click', function(){
-  //   ct = (ct +1) % 200;
-  //   text.textContent = count + " : " + ct;
-  // });
-
-  // text.textContent = count + " : " + ct;
-
   function drawCameraToCanvas() {
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
     let src = cv.imread(movie);
-    // let src = cv.imread(img);
-
-    // const ycrcb = new cv.Mat();
-    // cv.cvtColor(src, ycrcb, cv.COLOR_BGR2YCrCb);  // RGB → YCrCb 変換
-
-    // const channels = new cv.MatVector();
-    // cv.split(ycrcb, channels);  // チャンネル分割（Y, Cr, Cb）
-
-    // cv.equalizeHist(channels.get(0), channels.get(0));  // Y チャンネルを均一化
-
-    // cv.merge(channels, ycrcb);  // チャンネルを統合
-    // cv.cvtColor(ycrcb, src, cv.COLOR_YCrCb2BGR);  // YCrCb → RGB に戻す
-
-    // const gray = new cv.Mat();
-    // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-
-    // // 平均輝度を計算
-    // const mean = cv.mean(gray)[0];
-
-    // // 目標の平均輝度（例: 128 に正規化）
-    // const targetBrightness = 128;
-    // const scale = targetBrightness / mean;
-
-    // // 画像の輝度を調整
-    // const dst = new cv.Mat();
-    // cv.convertScaleAbs(src, dst, scale, 0);
-
 
     let hsv = new cv.Mat();
     cv.cvtColor(src, hsv, cv.COLOR_RGB2HSV);
 
-    // cv.GaussianBlur(hsv, hsv, new cv.Size(5, 5), 0, 0); //ノイズを抑えながら自然にぼかす
-    // cv.medianBlur(hsv, hsv, 5);                         //小さなノイズを除去するのに最適（特に塩胡椒ノイズ）
-
-    // cv.imshow("canvas", hsv);
-
-    // let mask = [];
     let rpara = [];
     let rweigth = [];
     let rct = 0;
@@ -144,17 +79,14 @@
 
     let mask = new cv.Mat();
     let masks = new cv.Mat();
-   
-    console.log("mask");
 
     let lowerb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175, 70, 180, 0]);
     let upperb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [200, 255, 255, 0]);
-    // cv.inRange(hsv, red1lower, red1upper, red1mask); // 色の範囲でマスク作成
+    
     cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
     lowerb.setTo(new cv.Scalar(175, 170, 10, 0));
     upperb.setTo(new cv.Scalar(200, 255, 180, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    console.log("rmask");
     cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(0, 70, 180, 0));
     upperb.setTo(new cv.Scalar(5, 255, 255, 0));
@@ -163,25 +95,14 @@
     lowerb.setTo(new cv.Scalar(0, 170, 10, 0));
     upperb.setTo(new cv.Scalar(5, 255, 180, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    // mask.push(redmask);
+    cv.add(masks, mask, mask); //redmask
 
     let contours = new cv.MatVector();
     let hierarchy = new cv.Mat();
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    console.log("rbrob");
-    // let sumarea = 0;
-    // ブロブを描画
+    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE); //ブロブ検出
     const output = src.clone();
-    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-      // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
 
       if (area > movie.width*movie.height/2000 && area < movie.width*movie.height/15){
         let para = [];
@@ -192,72 +113,37 @@
 
         // const rect = cv.boundingRect(contours.get(i));
         // const aspectRatio = rect.width / rect.height;
-
-        // const approx = new cv.Mat();
-        // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
-
-        // drawContours には MatVector が必要なのでラップする
-        // const approxVec = new cv.MatVector();
-        // approxVec.push_back(approx);
-
-        // 緑で描画（単純化された輪郭）
-        // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
         
-        // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) {  // 小さいノイズを除外
-          cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-          console.log("moment");
+        // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) { 
 
-          const moments = cv.moments(contours.get(i));
-          const cx = moments.m10 / moments.m00;
-          const cy = moments.m01 / moments.m00;
-          cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 0, 0, 255), -1);  // 中心に緑の点
+        const moments = cv.moments(contours.get(i));
+        const cx = moments.m10 / moments.m00;
+        const cy = moments.m01 / moments.m00;
 
-          para.push(cx);
-          para.push(cy);
-          para.push(area);
-          rpara.push(para);
-          rweigth.push([...maxdmat]);
-          rct++;
-        // }
-
-        // approx.delete();
-        // approxVec.delete();
+        para.push(cx);
+        para.push(cy);
+        para.push(area);
+        rpara.push(para);
+        rweigth.push([...maxdmat]);
+        rct++;
       }
     }
 
-    console.log("ymask");
     lowerb.setTo(new cv.Scalar(15, 70, 220, 0));
     upperb.setTo(new cv.Scalar(30, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    // cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(7, 230, 10, 0));
     upperb.setTo(new cv.Scalar(20, 255, 220, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    // mask.push(yellowmask);
+    cv.add(masks, mask, mask);    //yellowmask
 
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    console.log("ybrob");
-    // let sumarea = 0;
-    // ブロブを描画
-    // const output = src.clone();
-    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-      // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
-
-      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(255, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
@@ -269,39 +155,21 @@
       }
     }
 
-    console.log("gmask");
     lowerb.setTo(new cv.Scalar(65, 70, 170, 0));
     upperb.setTo(new cv.Scalar(82, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    // cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
     upperb.setTo(new cv.Scalar(78, 255, 190, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    // mask.push(greenmask);
+    cv.add(masks, mask, mask);    //greenmask
 
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    console.log("gbrob");
-    // let sumarea = 0;
-    // ブロブを描画
-    // const output = src.clone();
-    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(0, 255, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-      // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
-
-      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
@@ -313,39 +181,21 @@
       }
     }
 
-    console.log("smask");
     lowerb.setTo(new cv.Scalar(90, 50, 150, 0));
     upperb.setTo(new cv.Scalar(105, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    // cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(95, 150, 10, 0));
     upperb.setTo(new cv.Scalar(111, 255, 150, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    // mask.push(skymask);
+    cv.add(masks, mask, mask);   //skymask
 
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    console.log("sbrob");
-    // let sumarea = 0;
-    // ブロブを描画
-    // const output = src.clone();
-    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-      // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
-
-      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
@@ -357,12 +207,9 @@
       }
     }
 
-
-    console.log("bmask");
     lowerb.setTo(new cv.Scalar(114, 250, 3, 0));
     upperb.setTo(new cv.Scalar(140, 255, 25, 0));
     cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    // cv.add(masks, mask, mask);
     lowerb.setTo(new cv.Scalar(110, 160, 25, 0));
     upperb.setTo(new cv.Scalar(120, 255, 110, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
@@ -370,31 +217,15 @@
     lowerb.setTo(new cv.Scalar(105, 10, 100, 0));
     upperb.setTo(new cv.Scalar(122, 255, 255, 0));
     cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    // mask.push(bluemask);
+    cv.add(masks, mask, mask);  //bluemask
 
     cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    console.log("bbrob");
-    // let sumarea = 0;
-    // ブロブを描画
-    // const output = src.clone();
-    // const output = result.clone();
     for (let i = 0; i < contours.size(); i++) {
-      const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-      // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-      // 面積でフィルタしたり、重心を求める例：
       const area = cv.contourArea(contours.get(i));
-      // sumarea = sumarea + area;
-      console.log("area");
-
-      cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      console.log("moment");
 
       const moments = cv.moments(contours.get(i));
       const cx = moments.m10 / moments.m00;
       const cy = moments.m01 / moments.m00;
-      cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 0, 255, 255), -1);  // 中心に緑の点
 
       for(let j = 0; j < rct; j++){
         if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
@@ -406,9 +237,9 @@
       }
     }
 
+    // text.textContent = "";
 
-    console.log("fmask");
-    text.textContent = "";
+    cty.clearRect(0, 0, canvas.width, canvas.height);
 
     let rdist = [];
     for(let i = 0; i < rct; i++){
@@ -418,7 +249,7 @@
       }
       weight *= 99 + rpara[i][2] / (movie.width*movie.height);
       rdist.push(weight);
-      text.textContent += rpara[i][0].toFixed()+ "," +rpara[i][1].toFixed() + " : " + weight + "\n";
+      // text.textContent += rpara[i][0].toFixed()+ "," +rpara[i][1].toFixed() + " : " + weight + "\n";
     }
     if(rct > 1){
       let rmax1 = 0;
@@ -437,77 +268,18 @@
           }
         }
       }
+      //  // 2. 点を描く
+      // cty.beginPath();
+      // cty.arc(x, 180, 4, 0, 2 * Math.PI);
+      // cty.fillStyle = 'red';
+      // cty.fill();
       cv.circle(output, new cv.Point(rpara[rmax1][0], rpara[rmax1][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
       cv.circle(output, new cv.Point(rpara[rmax2][0], rpara[rmax2][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
     }else if(rct == 1){
       cv.circle(output, new cv.Point(rpara[0][0], rpara[0][1]), 4, new cv.Scalar(128, 128, 128, 255), -1);
     }
-    // 4. モルフォロジー変換（ノイズ除去）
-    // const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
-    // cv.morphologyEx(red1mask, mask, cv.MORPH_OPEN, kernel);
-    // cv.morphologyEx(red1mask, mask, cv.MORPH_CLOSE, kernel);
 
-    // マスクを適用して抽出
-    // let result = new cv.Mat();
-    // cv.bitwise_and(src, src, result, mask);
-
-    // // 輪郭検出
-    // const contours = new cv.MatVector();
-    // const hierarchy = new cv.Mat();
-    // cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-    // console.log("brob");
-    // // let sumarea = 0;
-    // // ブロブを描画
-    // const output = src.clone();
-    // // const output = result.clone();
-    // for (let i = 0; i < contours.size(); i++) {
-    //   const color = new cv.Scalar(255, 0, 0, 255);  // 赤
-    //   // cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-      
-    //   // 面積でフィルタしたり、重心を求める例：
-    //   const area = cv.contourArea(contours.get(i));
-    //   // sumarea = sumarea + area;
-    //   console.log("area");
-
-    //   if (area > 125 && area < 2500){
-
-    //     // const perimeter = cv.arcLength(contours.get(i), true);
-    //     // // 円形度の計算
-    //     // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
-
-    //     // const rect = cv.boundingRect(contours.get(i));
-    //     // const aspectRatio = rect.width / rect.height;
-
-    //     // const approx = new cv.Mat();
-    //     // cv.approxPolyDP(contours.get(i), approx, 0.04 * perimeter, true);
-
-    //     // drawContours には MatVector が必要なのでラップする
-    //     // const approxVec = new cv.MatVector();
-    //     // approxVec.push_back(approx);
-
-    //     // 緑で描画（単純化された輪郭）
-    //     // cv.drawContours(output, approxVec, 0, new cv.Scalar(0, 255, 0, 255), 2);
-        
-    //     // if (aspectRatio < 4.0 && aspectRatio > (1.0/4)) {  // 小さいノイズを除外
-    //       cv.drawContours(output, contours, i, color, 2, cv.LINE_8, hierarchy, 100);
-    //       console.log("moment");
-
-    //       const moments = cv.moments(contours.get(i));
-    //       const cx = moments.m10 / moments.m00;
-    //       const cy = moments.m01 / moments.m00;
-    //       cv.circle(output, new cv.Point(cx, cy), 4, new cv.Scalar(0, 255, 0, 255), -1);  // 中心に緑の点
-    //     // }
-
-    //     // approx.delete();
-    //     // approxVec.delete();
-    //   }
-    // }
-
-    // text.textContent = count + " : " + ct + " , " + sumarea + " : " + (movie.width * movie.height);
-    // 表示
     cv.imshow('movie', output);
-    // cv.imshow('movie', result);
 
     // メモリ解放
     src.delete();
@@ -516,14 +288,9 @@
     masks.delete();
     lowerb.delete();
     upperb.delete();
-    // result.delete();
     contours.delete();
     hierarchy.delete();
     output.delete();
-
-    // ycrcb.delete();
-    // channels.delete();
-    // gray.delete();
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
@@ -546,7 +313,7 @@
       video.width  = settings.width;
       video.height = settings.height;
       console.log(video.height);
-      text.textContent = settings.width + " : " + settings.height ;
+      text.textContent = settings.width + " : " + settings.height + " , " + canvas.width + " : " + canvas.height;
 
       const rect = video.getBoundingClientRect();
       overlay.style.left = `${rect.left + rect.width / 2 - overlay.width/2}px`; // 50 = 半分の画像幅
@@ -554,13 +321,8 @@
       text.style.left = `${rect.left + rect.width}px`;
       text.style.top = `${(rect.height - rect.width *4 /3)/2}px`;
 
-      // movie.width = movie.height *video.width /video.height
-      // canvas.height = canvas.width * video.height / video.width;
-      
-      movie.width = 200;
+      movie.width = 210;
       movie.height = movie.width *video.height /video.width;
-
-      // text.textContent = canvas.width + ":" + canvas.height;
 
       // 映像の準備ができたら描画開始
       video.onplaying = () => {
@@ -578,9 +340,6 @@
     console.log("初期読み込み完了");
     console.log(cv);
     console.log(typeof (cv.imread));
-
-    // canvas.width  = window.innerWidth;
-    // canvas.height = window.innerHeight;
     console.log(video.height);
     
     // video.style = 'display:none';
