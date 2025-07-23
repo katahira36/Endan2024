@@ -29,11 +29,13 @@
   <p id="text" style="
     position: absolute;
     top: 0;
-    font-size: 30px;
+    width: 100vw;
+    font-size: 50px;
     color: rgba(255, 128, 0, 0.7);
     background-color: rgba(0, 255, 255, 0.5);
     transform: rotate(90deg);
-    transform-origin: left top;  /* 回転の中心（必要に応じて） */"></p>
+    transform-origin: left top;  /* 回転の中心（必要に応じて） */
+    white-space: pre-line;"></p>
 
   <canvas id="canvas" width="300" height="400" style="
     position: absolute;
@@ -64,232 +66,323 @@
 
   const text = document.getElementById("text");
 
+  let newgpinput = 0;
+  let oldgpinput = 0;
+  let keyboardflag = 0;
+  function updateSratus(){
+    let newgpinput = 1023;
+  }
+
+  const keyconfig = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "];
+
   function drawCameraToCanvas() {
-    ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
-    let hsv = cv.imread(movie);
-    cv.cvtColor(hsv, hsv, cv.COLOR_RGB2HSV);
+    updateSratus();
 
-    let rpara = [];
-    let rweigth = [];
-    let rct = 0;
-    const cweight = [1,2.72,3.24,3.61];
-    let maxd = movie.width*movie.width + movie.height*movie.height;
-    let maxdmat = [];
-    for(let i = 0; i < 4; i++){
-      maxdmat.push(maxd);
-    }
+    if(keyboardflag){
+      ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, movie.width, movie.height);
+      let hsv = cv.imread(movie);
+      cv.cvtColor(hsv, hsv, cv.COLOR_RGB2HSV);
 
-    let mask = new cv.Mat();
-    let masks = new cv.Mat();
+      let rpara = [];
+      let rweigth = [];
+      let rct = 0;
+      const cweight = [1,2.72,3.24,3.61];
+      let maxd = movie.width*movie.width + movie.height*movie.height;
+      let maxdmat = [];
+      for(let i = 0; i < 4; i++){
+        maxdmat.push(maxd);
+      }
 
-    let lowerb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175, 70, 180, 0]);
-    let upperb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [200, 255, 255, 0]);
-    
-    cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    lowerb.setTo(new cv.Scalar(175, 170, 10, 0));
-    upperb.setTo(new cv.Scalar(200, 255, 180, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    lowerb.setTo(new cv.Scalar(0, 70, 180, 0));
-    upperb.setTo(new cv.Scalar(5, 255, 255, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    lowerb.setTo(new cv.Scalar(0, 170, 10, 0));
-    upperb.setTo(new cv.Scalar(5, 255, 180, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask); //redmask
+      let mask = new cv.Mat();
+      let masks = new cv.Mat();
 
-    let contours = new cv.MatVector();
-    let hierarchy = new cv.Mat();
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE); //ブロブ検出
-    for (let i = 0; i < contours.size(); i++) {
-      const area = cv.contourArea(contours.get(i));
+      let lowerb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [175, 70, 180, 0]);
+      let upperb = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [200, 255, 255, 0]);
+      
+      cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
+      lowerb.setTo(new cv.Scalar(175, 170, 10, 0));
+      upperb.setTo(new cv.Scalar(200, 255, 180, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);
+      lowerb.setTo(new cv.Scalar(0, 70, 180, 0));
+      upperb.setTo(new cv.Scalar(5, 255, 255, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);
+      lowerb.setTo(new cv.Scalar(0, 170, 10, 0));
+      upperb.setTo(new cv.Scalar(5, 255, 180, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask); //redmask
 
-      if (area > movie.width*movie.height/2000 && area < movie.width*movie.height/15){
-        let para = [];
+      let contours = new cv.MatVector();
+      let hierarchy = new cv.Mat();
+      cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE); //ブロブ検出
+      for (let i = 0; i < contours.size(); i++) {
+        const area = cv.contourArea(contours.get(i));
 
-        // const perimeter = cv.arcLength(contours.get(i), true);
-        // // 円形度の計算
-        // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+        if (area > movie.width*movie.height/2000 && area < movie.width*movie.height/15){
+          let para = [];
 
-        // const rect = cv.boundingRect(contours.get(i));
-        // const aspectRatio = rect.width / rect.height;
-        
-        // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) { 
+          // const perimeter = cv.arcLength(contours.get(i), true);
+          // // 円形度の計算
+          // const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
+
+          // const rect = cv.boundingRect(contours.get(i));
+          // const aspectRatio = rect.width / rect.height;
+          
+          // if (aspectRatio < 3.0 && aspectRatio > (1.0/3)) { 
+
+          const moments = cv.moments(contours.get(i));
+          const cx = moments.m10 / moments.m00;
+          const cy = moments.m01 / moments.m00;
+
+          para.push(cx);
+          para.push(cy);
+          para.push(area);
+          rpara.push(para);
+          rweigth.push([...maxdmat]);
+          rct++;
+        }
+      }
+
+      lowerb.setTo(new cv.Scalar(15, 70, 220, 0));
+      upperb.setTo(new cv.Scalar(30, 255, 255, 0));
+      cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
+      lowerb.setTo(new cv.Scalar(7, 230, 10, 0));
+      upperb.setTo(new cv.Scalar(20, 255, 220, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);    //yellowmask
+
+      cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+      for (let i = 0; i < contours.size(); i++) {
+        const area = cv.contourArea(contours.get(i));
 
         const moments = cv.moments(contours.get(i));
         const cx = moments.m10 / moments.m00;
         const cy = moments.m01 / moments.m00;
 
-        para.push(cx);
-        para.push(cy);
-        para.push(area);
-        rpara.push(para);
-        rweigth.push([...maxdmat]);
-        rct++;
-      }
-    }
-
-    lowerb.setTo(new cv.Scalar(15, 70, 220, 0));
-    upperb.setTo(new cv.Scalar(30, 255, 255, 0));
-    cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    lowerb.setTo(new cv.Scalar(7, 230, 10, 0));
-    upperb.setTo(new cv.Scalar(20, 255, 220, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);    //yellowmask
-
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    for (let i = 0; i < contours.size(); i++) {
-      const area = cv.contourArea(contours.get(i));
-
-      const moments = cv.moments(contours.get(i));
-      const cx = moments.m10 / moments.m00;
-      const cy = moments.m01 / moments.m00;
-
-      for(let j = 0; j < rct; j++){
-        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
-          if(rweigth[j][0] > dist){
-            rweigth[j][0] = dist;
+        for(let j = 0; j < rct; j++){
+          if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
+            const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[2];
+            if(rweigth[j][0] > dist){
+              rweigth[j][0] = dist;
+            }
           }
         }
       }
-    }
 
-    lowerb.setTo(new cv.Scalar(65, 70, 170, 0));
-    upperb.setTo(new cv.Scalar(82, 255, 255, 0));
-    cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
-    upperb.setTo(new cv.Scalar(78, 255, 190, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);    //greenmask
+      lowerb.setTo(new cv.Scalar(65, 70, 170, 0));
+      upperb.setTo(new cv.Scalar(82, 255, 255, 0));
+      cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
+      lowerb.setTo(new cv.Scalar(55, 180, 4, 0));
+      upperb.setTo(new cv.Scalar(78, 255, 190, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);    //greenmask
 
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    for (let i = 0; i < contours.size(); i++) {
-      const area = cv.contourArea(contours.get(i));
+      cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+      for (let i = 0; i < contours.size(); i++) {
+        const area = cv.contourArea(contours.get(i));
 
-      const moments = cv.moments(contours.get(i));
-      const cx = moments.m10 / moments.m00;
-      const cy = moments.m01 / moments.m00;
+        const moments = cv.moments(contours.get(i));
+        const cx = moments.m10 / moments.m00;
+        const cy = moments.m01 / moments.m00;
 
-      for(let j = 0; j < rct; j++){
-        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
-          if(rweigth[j][1] > dist){
-            rweigth[j][1] = dist;
+        for(let j = 0; j < rct; j++){
+          if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
+            const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[1];
+            if(rweigth[j][1] > dist){
+              rweigth[j][1] = dist;
+            }
           }
         }
       }
-    }
 
-    lowerb.setTo(new cv.Scalar(90, 50, 150, 0));
-    upperb.setTo(new cv.Scalar(105, 255, 255, 0));
-    cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    lowerb.setTo(new cv.Scalar(95, 150, 10, 0));
-    upperb.setTo(new cv.Scalar(111, 255, 150, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);   //skymask
+      lowerb.setTo(new cv.Scalar(90, 50, 150, 0));
+      upperb.setTo(new cv.Scalar(105, 255, 255, 0));
+      cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
+      lowerb.setTo(new cv.Scalar(95, 150, 10, 0));
+      upperb.setTo(new cv.Scalar(111, 255, 150, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);   //skymask
 
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    for (let i = 0; i < contours.size(); i++) {
-      const area = cv.contourArea(contours.get(i));
+      cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+      for (let i = 0; i < contours.size(); i++) {
+        const area = cv.contourArea(contours.get(i));
 
-      const moments = cv.moments(contours.get(i));
-      const cx = moments.m10 / moments.m00;
-      const cy = moments.m01 / moments.m00;
+        const moments = cv.moments(contours.get(i));
+        const cx = moments.m10 / moments.m00;
+        const cy = moments.m01 / moments.m00;
 
-      for(let j = 0; j < rct; j++){
-        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
-          if(rweigth[j][2] > dist){
-            rweigth[j][2] = dist;
+        for(let j = 0; j < rct; j++){
+          if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
+            const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[3];
+            if(rweigth[j][2] > dist){
+              rweigth[j][2] = dist;
+            }
           }
         }
       }
-    }
 
-    lowerb.setTo(new cv.Scalar(114, 250, 3, 0));
-    upperb.setTo(new cv.Scalar(140, 255, 25, 0));
-    cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
-    lowerb.setTo(new cv.Scalar(110, 160, 25, 0));
-    upperb.setTo(new cv.Scalar(120, 255, 110, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);
-    lowerb.setTo(new cv.Scalar(105, 10, 100, 0));
-    upperb.setTo(new cv.Scalar(122, 255, 255, 0));
-    cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
-    cv.add(masks, mask, mask);  //bluemask
+      lowerb.setTo(new cv.Scalar(114, 250, 3, 0));
+      upperb.setTo(new cv.Scalar(140, 255, 25, 0));
+      cv.inRange(hsv, lowerb, upperb, mask); // 色の範囲でマスク作成
+      lowerb.setTo(new cv.Scalar(110, 160, 25, 0));
+      upperb.setTo(new cv.Scalar(120, 255, 110, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);
+      lowerb.setTo(new cv.Scalar(105, 10, 100, 0));
+      upperb.setTo(new cv.Scalar(122, 255, 255, 0));
+      cv.inRange(hsv, lowerb, upperb, masks); // 色の範囲でマスク作成
+      cv.add(masks, mask, mask);  //bluemask
 
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    for (let i = 0; i < contours.size(); i++) {
-      const area = cv.contourArea(contours.get(i));
+      cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+      for (let i = 0; i < contours.size(); i++) {
+        const area = cv.contourArea(contours.get(i));
 
-      const moments = cv.moments(contours.get(i));
-      const cx = moments.m10 / moments.m00;
-      const cy = moments.m01 / moments.m00;
+        const moments = cv.moments(contours.get(i));
+        const cx = moments.m10 / moments.m00;
+        const cy = moments.m01 / moments.m00;
 
-      for(let j = 0; j < rct; j++){
-        if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
-          const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
-          if(rweigth[j][3] > dist){
-            rweigth[j][3] = dist;
+        for(let j = 0; j < rct; j++){
+          if (((rpara[j][2] - area)/ rpara[j][2] < 0.6) && ((rpara[j][2] - area)/ rpara[j][2] > -0.1)){
+            const dist = ((rpara[j][0] - cx)*(rpara[j][0] - cx) + (rpara[j][1] - cy)*(rpara[j][1] - cy))/ rpara[j][2] /cweight[0];
+            if(rweigth[j][3] > dist){
+              rweigth[j][3] = dist;
+            }
           }
         }
       }
-    }
 
-    cty.clearRect(0, 0, canvas.width, canvas.height);
+      cty.clearRect(0, 0, canvas.width, canvas.height);
 
-    let rdist = [];
-    for(let i = 0; i < rct; i++){
-      let weight = 0;
-      for(let j=0;j<4;j++){
-        weight += rweigth[i][j];
+      let rdist = [];
+      for(let i = 0; i < rct; i++){
+        let weight = 0;
+        for(let j=0;j<4;j++){
+          weight += rweigth[i][j];
+        }
+        weight *= 99 + rpara[i][2] / (movie.width*movie.height);
+        rdist.push(weight);
       }
-      weight *= 99 + rpara[i][2] / (movie.width*movie.height);
-      rdist.push(weight);
-    }
-    if(rct > 1){
-      let rmax1 = 0;
-      let rmax2 = 1;
-      if(rdist[rmax2] < rdist[rmax1]){
-        rmax1 = 1;
-        rmax2 = 0;
-      }
-      for(let i = 2; i < rct; i++){
-        if(rdist[rmax2] > rdist[i]){
-          rmax2 = i;
-          if(rdist[rmax2] < rdist[rmax1]){
-            let temp = rmax2;
-            rmax2 = rmax1;
-            rmax1 = temp;
+      if(rct > 1){
+        let rmax1 = 0;
+        let rmax2 = 1;
+        if(rdist[rmax2] < rdist[rmax1]){
+          rmax1 = 1;
+          rmax2 = 0;
+        }
+        for(let i = 2; i < rct; i++){
+          if(rdist[rmax2] > rdist[i]){
+            rmax2 = i;
+            if(rdist[rmax2] < rdist[rmax1]){
+              let temp = rmax2;
+              rmax2 = rmax1;
+              rmax1 = temp;
+            }
           }
         }
-      }
-      // 2. 点を描く
-      cty.beginPath();
-      cty.arc(rpara[rmax1][0] * canvas.width /movie.width, rpara[rmax1][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
-      cty.fillStyle = 'rgb(255, 0, 0)';
-      cty.fill();
-      cty.beginPath();
-      cty.arc(rpara[rmax2][0] * canvas.width /movie.width, rpara[rmax2][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
-      cty.fillStyle = 'rgb(255, 0, 0)';
-      cty.fill();
-    }else if(rct == 1){
-      cty.beginPath();
-      cty.arc(rpara[0][0] * canvas.width /movie.width, rpara[0][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
-      cty.fillStyle = 'rgb(255, 0, 0)';
-      cty.fill();
-    }
+        // 2. 点を描く
+        cty.beginPath();
+        cty.arc(rpara[rmax1][0] * canvas.width /movie.width, rpara[rmax1][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+        cty.fillStyle = 'rgb(255, 0, 0)';
+        cty.fill();
+        cty.beginPath();
+        cty.arc(rpara[rmax2][0] * canvas.width /movie.width, rpara[rmax2][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+        cty.fillStyle = 'rgb(255, 0, 0)';
+        cty.fill();
 
-    // メモリ解放
-    hsv.delete();
-    mask.delete();
-    masks.delete();
-    lowerb.delete();
-    upperb.delete();
-    contours.delete();
-    hierarchy.delete();
+        let key1 = 100;
+        let key2 = 100;
+        const yohaku = movie.width * 5 /42;
+        const keyw = movie.width *4 /12;
+        const keyh = movie.height /11;
+        for(let i = 0; i < 2; i++){
+          for(let j = 0; j < 5; j++){
+            for(let k = 0; k < 4; k++){
+              if((rpara[rmax1][0] > yohaku + keyw * k) && (rpara[rmax1][0] < yohaku + keyw * (k+1)) && (rpara[rmax1][1] > keyh * (j + 6 * i)) && (rpara[rmax1][1] < keyh * (j + 1 + 6 * i))){
+                key1 = j + 5 * i + 10 * (4 - k);
+              }
+              if((rpara[rmax2][0] > yohaku + keyw * k) && (rpara[rmax2][0] < yohaku + keyw * (k+1)) && (rpara[rmax2][1] > keyh * (j + 6 * i)) && (rpara[rmax2][1] < keyh * (j + 1 + 6 * i))){
+                key2 = j + 5 * i + 10 * (4 - k);
+              }
+            }
+          }
+        }
+        if((newgpinput & 1) && !(oldgpinput & 1)){
+          if(rpara[rmax1][1] > rpara[rmax2][1]){
+            if((key1 > 9) && (key1 < 36) && (key2 == 37) && (newgpinput & 2)){
+              text.textContent += keyconfig[key1].toUpperCase();
+            }else if(key1 < 37){
+              text.textContent += keyconfig[key1];
+            }else if(key1 == 38){
+              text.textContent = text.textContent.slice(0, -1);
+            }else if(key1 == 39){
+              text.textContent += "\n";
+            }
+          }else{
+            if((key2 > 9) && (key2 < 36) && (key1 == 37) && (newgpinput & 2)){
+              text.textContent += keyconfig[key2].toUpperCase();
+            }else if(key2 < 37){
+              text.textContent += keyconfig[key2];
+            }else if(key2 == 38){
+              text.textContent = text.textContent.slice(0, -1);
+            }else if(key2 == 39){
+              text.textContent += "\n";
+            }
+          }
+        }
+        if((newgpinput & 2) && !(oldgpinput & 2)){
+          if(rpara[rmax1][1] <= rpara[rmax2][1]){
+            if((key1 > 9) && (key1 < 36) && (key2 == 37) && (newgpinput & 2)){
+              text.textContent += keyconfig[key1].toUpperCase();
+            }else if(key1 < 37){
+              text.textContent += keyconfig[key1];
+            }else if(key1 == 38){
+              text.textContent = text.textContent.slice(0, -1);
+            }else if(key1 == 39){
+              text.textContent += "\n";
+            }
+          }else{
+            if((key2 > 9) && (key2 < 36) && (key1 == 37) && (newgpinput & 2)){
+              text.textContent += keyconfig[key2].toUpperCase();
+            }else if(key2 < 37){
+              text.textContent += keyconfig[key2];
+            }else if(key2 == 38){
+              text.textContent = text.textContent.slice(0, -1);
+            }else if(key2 == 39){
+              text.textContent += "\n";
+            }
+          }
+        }
+      }else if(rct == 1){
+        cty.beginPath();
+        cty.arc(rpara[0][0] * canvas.width /movie.width, rpara[0][1] *canvas.height /movie.height, 4, 0, 2 * Math.PI);
+        cty.fillStyle = 'rgb(255, 0, 0)';
+        cty.fill();
+      }
+
+      if((newgpinput == 1023) && (oldgpinput != 1023)){
+        keyboardflag = 0;
+        overlay.style.visibility = 'hidden';
+        canvas.style.visibility = 'hidden';
+        text.textContent = "";
+      }
+
+      // メモリ解放
+      hsv.delete();
+      mask.delete();
+      masks.delete();
+      lowerb.delete();
+      upperb.delete();
+      contours.delete();
+      hierarchy.delete();
+    }else{
+      if((newgpinput == 1023) && (oldgpinput != 1023)){
+        keyboardflag = 1;
+        overlay.style.visibility = 'visible';
+        canvas.style.visibility = 'visible';
+      }
+    }
+    oldgpinput = newgpinput;
 
     // 再度次のフレームを描画するためにrequestAnimationFrameを使う
     requestAnimationFrame(drawCameraToCanvas);
