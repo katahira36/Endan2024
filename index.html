@@ -68,7 +68,7 @@
 
   let newgpinput = 0;
   let oldgpinput = 0;
-  let keyboardflag = 0;
+  let keyboardflag = 1;
   function updateSratus(){
     let newgpinput = 1023;
   }
@@ -307,7 +307,7 @@
             }
           }
         }
-        if((newgpinput & 1) && !(oldgpinput & 1)){
+        if((newgpinput & (1<<0)) && !(oldgpinput & (1<<0))){
           if(rpara[rmax1][1] > rpara[rmax2][1]){
             if((key1 > 9) && (key1 < 36) && (key2 == 37) && (newgpinput & 2)){
               text.textContent += keyconfig[key1].toUpperCase();
@@ -361,7 +361,7 @@
       }
 
       if((newgpinput == 1023) && (oldgpinput != 1023)){
-        keyboardflag = 0;
+        keyboardflag = 1;
         overlay.style.visibility = 'hidden';
         canvas.style.visibility = 'hidden';
         text.textContent = "";
@@ -380,6 +380,7 @@
         keyboardflag = 1;
         overlay.style.visibility = 'visible';
         canvas.style.visibility = 'visible';
+        text.textContent = "";
       }
     }
     oldgpinput = newgpinput;
